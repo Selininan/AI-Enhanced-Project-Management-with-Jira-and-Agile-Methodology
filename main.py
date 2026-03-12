@@ -3,7 +3,7 @@ from requests.auth import HTTPBasicAuth
 import pandas as pd
 import random
 import matplotlib.pyplot as plt
-from fpdf import FPDF
+
 
 
 from agents.risk_agent import calculate_risk
@@ -11,6 +11,7 @@ from agents.capacity_agent import capacity_analysis
 from agents.recommendation_agent import ai_recommendation
 from agents.requirement_agent import requirement_analysis
 from context.context_builder import build_context
+from reports.pdf_report import create_pdf_report
 
 email = "zeynepuz2003@gmail.com"
 api_token = "ATATT3xFfGF0TPa2jkYWlFSXnAhwlY0acmWFlW8Ri9p0qeFHXAclcY442pSN8IqqXZOisLemj2g--mGEISxL7dKmE-YWtUpcHzHpFYOHkDyeQO3-zKBRRjI1Dyx_Bs--uR5Rp4qzlMhf5m_1lHLE5XejwHExbjQITImqVbZgfg7achxFeqlzUrU=0D32B338"
@@ -92,7 +93,7 @@ plt.ylabel("Risk")
 plt.savefig("risk_chart.png")
 
 
-
+create_pdf_report(df, total_effort, team_capacity)
 
 
 
