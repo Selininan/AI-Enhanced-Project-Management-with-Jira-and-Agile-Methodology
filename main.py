@@ -3,9 +3,11 @@ from requests.auth import HTTPBasicAuth
 import pandas as pd
 import random
 import matplotlib.pyplot as plt
+from dotenv import load_dotenv
+import os
 
 email = "zeynepuz2003@gmail.com"
-api_token = "ATATT3xFfGF04CPH54bMXpgM5Tc3BaM6YPqQvxvt6kbDL6UHPt1UCCnbVvDh1Zc5e-7S74aVbvd6SGgyhRyoE_mnltjGKgME4V3KCPsILOn_Rm5rR_nFJQ_zzi2LDz4IdI6mWk2VTWDinQFKLlKWGxqmD1r1HCCYye61kAH312UeUKyA66Px3fg=93C5DF95"
+api_token = "ATATT3xFfGF0TPa2jkYWlFSXnAhwlY0acmWFlW8Ri9p0qeFHXAclcY442pSN8IqqXZOisLemj2g--mGEISxL7dKmE-YWtUpcHzHpFYOHkDyeQO3-zKBRRjI1Dyx_Bs--uR5Rp4qzlMhf5m_1lHLE5XejwHExbjQITImqVbZgfg7achxFeqlzUrU=0D32B338"
 domain = "zeynepuz200345.atlassian.net"
 
 url = f"https://{domain}/rest/api/3/search/jql"
@@ -97,3 +99,65 @@ plt.xlabel("Task")
 plt.ylabel("Risk")
 
 plt.show()
+
+def ai_recommendation(row):
+
+    if row["risk_score"] >= 3:
+        return "High risk → split task or add developer"
+
+    elif row["delay"]:
+        return "Delayed → increase priority"
+
+    elif row["status"] != "Done":
+        return "In progress → monitor"
+
+    else:
+        return "OK"
+
+
+df["recommendation"] = df.apply(ai_recommendation, axis=1)
+
+print("\nAI RECOMMENDATIONS\n")
+
+print(
+    df[
+        [
+            "key",
+            "status",
+            "estimated_days",
+            "real_days",
+            "risk_score",
+            "recommendation",
+        ]
+    ]
+)
+
+print("\nSPRINT HEALTH REPORT\n")
+
+if average_risk < 1:
+    print("Sprint status: LOW RISK")
+
+elif average_risk < 2:
+    print("Sprint status: MEDIUM RISK")
+
+else:
+    print("Sprint status: HIGH RISK")
+
+
+delayed_tasks = df[df["delay"] == True]
+
+print("\nDelayed tasks:", len(delayed_tasks))
+
+high_risk_tasks = df[df["risk_score"] >= 3]
+
+print("High risk tasks:", len(high_risk_tasks))
+
+
+if len(high_risk_tasks) > 2:
+    print("Recommendation: Add more developers to sprint")
+
+if len(delayed_tasks) > 2:
+    print("Recommendation: Review planning accuracy")
+
+if average_risk > 2:
+    print("Recommendation: Reduce sprint workload")
