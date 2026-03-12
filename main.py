@@ -5,6 +5,8 @@ import random
 import matplotlib.pyplot as plt
 from dotenv import load_dotenv
 import os
+from fpdf import FPDF
+
 
 email = "zeynepuz2003@gmail.com"
 api_token = "ATATT3xFfGF0TPa2jkYWlFSXnAhwlY0acmWFlW8Ri9p0qeFHXAclcY442pSN8IqqXZOisLemj2g--mGEISxL7dKmE-YWtUpcHzHpFYOHkDyeQO3-zKBRRjI1Dyx_Bs--uR5Rp4qzlMhf5m_1lHLE5XejwHExbjQITImqVbZgfg7achxFeqlzUrU=0D32B338"
@@ -96,9 +98,11 @@ df["risk_score"].plot(kind="bar")
 
 plt.title("Task Risk Scores")
 plt.xlabel("Task")
-plt.ylabel("Risk")
+plt.ylabel("Risk Score")
 
-plt.show()
+plt.savefig("risk_chart.png")
+
+
 
 def ai_recommendation(row):
 
@@ -132,6 +136,9 @@ print(
     ]
 )
 
+
+
+
 print("\nSPRINT HEALTH REPORT\n")
 
 if average_risk < 1:
@@ -161,3 +168,92 @@ if len(delayed_tasks) > 2:
 
 if average_risk > 2:
     print("Recommendation: Reduce sprint workload")
+    
+    
+    
+    
+print("\nVELOCITY REPORT\n")
+
+done_tasks = df[df["status"] == "Tamam"]
+
+velocity = len(done_tasks)
+
+total_tasks = len(df)
+
+print("Total tasks:", total_tasks)
+print("Done tasks:", velocity)
+
+if total_tasks > 0:
+    velocity_rate = velocity / total_tasks
+else:
+    velocity_rate = 0
+
+print("Velocity rate:", velocity_rate)
+
+
+if velocity_rate > 0.7:
+    print("Sprint performance: GOOD")
+
+elif velocity_rate > 0.4:
+    print("Sprint performance: MEDIUM")
+
+else:
+    print("Sprint performance: LOW")    
+    
+    
+    
+pdf = FPDF()
+pdf.add_page()
+
+pdf.set_font("Arial", size=12)
+
+pdf.cell(200,10,"AI Sprint Report",ln=True)
+
+pdf.cell(200,10,f"Total Tasks: {len(df)}",ln=True)
+pdf.cell(200,10,f"Total Risk: {total_risk}",ln=True)
+pdf.cell(200,10,f"Average Risk: {average_risk}",ln=True)
+
+pdf.cell(200,10,"",ln=True)
+pdf.cell(200,10,"High Risk Tasks:",ln=True)
+
+for index,row in df.iterrows():
+    if row["risk_score"] >= 3:
+        pdf.cell(200,10,f'{row["key"]} - Risk:{row["risk_score"]}',ln=True)
+
+pdf.cell(200,10,"",ln=True)
+
+pdf.image("risk_chart.png", x=10, y=None, w=180)
+
+pdf.output("sprint_report.pdf")
+
+print("PDF REPORT CREATED")  
+
+
+
+
+print("\nCAPACITY ANALYSIS\n")
+
+team_members = 3
+hours_per_member = 40   # haftalık çalışma
+sprint_weeks = 2
+
+team_capacity = team_members * hours_per_member * sprint_weeks
+
+print("Team capacity (hours):", team_capacity)
+
+
+df["effort_hours"] = df["estimated_days"] * 6
+
+total_effort = df["effort_hours"].sum()
+
+print("Total sprint effort:", total_effort)
+
+
+print("\nSPRINT FEASIBILITY\n")
+
+if total_effort > team_capacity:
+    print("Sprint overloaded")
+    print("Recommendation: Reduce tasks")
+
+else:
+    print("Sprint feasible")
