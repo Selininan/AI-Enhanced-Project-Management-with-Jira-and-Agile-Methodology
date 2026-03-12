@@ -5,7 +5,7 @@ import random
 import matplotlib.pyplot as plt
 
 email = "zeynepuz2003@gmail.com"
-api_token = "ATATT3xFfGF04CPH54bMXpgM5Tc3BaM6YPqQvxvt6kbDL6UHPt1UCCnbVvDh1Zc5e-7S74aVbvd6SGgyhRyoE_mnltjGKgME4V3KCPsILOn_Rm5rR_nFJQ_zzi2LDz4IdI6mWk2VTWDinQFKLlKWGxqmD1r1HCCYye61kAH312UeUKyA66Px3fg=93C5DF95"
+api_token = "TOKENIM"
 domain = "zeynepuz200345.atlassian.net"
 
 url = f"https://{domain}/rest/api/3/search/jql"
