@@ -3,10 +3,14 @@ from requests.auth import HTTPBasicAuth
 import pandas as pd
 import random
 import matplotlib.pyplot as plt
-from dotenv import load_dotenv
-import os
 from fpdf import FPDF
 
+
+from agents.risk_agent import calculate_risk
+from agents.capacity_agent import capacity_analysis
+from agents.recommendation_agent import ai_recommendation
+from agents.requirement_agent import requirement_analysis
+from context.context_builder import build_context
 
 email = "zeynepuz2003@gmail.com"
 api_token = "ATATT3xFfGF0TPa2jkYWlFSXnAhwlY0acmWFlW8Ri9p0qeFHXAclcY442pSN8IqqXZOisLemj2g--mGEISxL7dKmE-YWtUpcHzHpFYOHkDyeQO3-zKBRRjI1Dyx_Bs--uR5Rp4qzlMhf5m_1lHLE5XejwHExbjQITImqVbZgfg7achxFeqlzUrU=0D32B338"
@@ -50,7 +54,51 @@ for issue in data.get("issues", []):
 
 df = pd.DataFrame(issues_list)
 
+
+# delay hesaplama
 df["delay"] = df["real_days"] > df["estimated_days"]
+
+# 🤖 AGENTS ÇALIŞIYOR
+df = calculate_risk(df)
+
+df = ai_recommendation(df)
+
+df = requirement_analysis(df)
+
+team_capacity, total_effort = capacity_analysis(df)
+
+print("\nTASK TABLE\n")
+print(df)
+
+print("\nTEAM CAPACITY:", team_capacity)
+print("TOTAL EFFORT:", total_effort)
+
+project_context = build_context(df)
+
+print("\nPROJECT CONTEXT\n")
+
+for key,value in project_context.items():
+    print(key, ":", value)
+    
+    
+# grafik
+plt.figure()
+df["risk_score"].plot(kind="bar")
+
+plt.title("Task Risk Scores")
+plt.xlabel("Task")
+plt.ylabel("Risk")
+
+plt.savefig("risk_chart.png")
+
+
+
+
+
+
+'''çalışıyordu sonrasında folderlara ayırdım.'''
+
+'''df["delay"] = df["real_days"] > df["estimated_days"]
 
 
 
@@ -256,4 +304,4 @@ if total_effort > team_capacity:
     print("Recommendation: Reduce tasks")
 
 else:
-    print("Sprint feasible")
+    print("Sprint feasible")'''
