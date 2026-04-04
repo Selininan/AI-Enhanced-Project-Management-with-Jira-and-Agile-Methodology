@@ -1,21 +1,54 @@
 import requests
 from requests.auth import HTTPBasicAuth
 import pandas as pd
-import random
 import matplotlib.pyplot as plt
 
+def add_jira_comment(issue_key, comment_text):
+    comment_url = f"https://{domain}/rest/api/3/issue/{issue_key}/comment"
 
+    comment_payload = {
+        "body": {
+            "type": "doc",
+            "version": 1,
+            "content": [
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": comment_text
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+
+    response = requests.post(
+        comment_url,
+        headers=headers,
+        auth=HTTPBasicAuth(email, api_token),
+        json=comment_payload
+    )
+
+    if response.status_code == 201:
+        print(f"Comment added to {issue_key}")
+    else:
+        print(f"Failed to add comment to {issue_key}: {response.status_code}")
+
+    print(issue_key, response.status_code, response.text)
 
 from agents.risk_agent import calculate_risk
 from agents.capacity_agent import capacity_analysis
 from agents.recommendation_agent import ai_recommendation
 from agents.requirement_agent import requirement_analysis
-from context.context_builder import build_context
-from reports.pdf_report import create_pdf_report
+from agents.task_validation_agent import validate_task
+from agents.jira_support_agent import jira_support_answer
 
 email = "zeynepuz2003@gmail.com"
 api_token = "ATATT3xFfGF0TPa2jkYWlFSXnAhwlY0acmWFlW8Ri9p0qeFHXAclcY442pSN8IqqXZOisLemj2g--mGEISxL7dKmE-YWtUpcHzHpFYOHkDyeQO3-zKBRRjI1Dyx_Bs--uR5Rp4qzlMhf5m_1lHLE5XejwHExbjQITImqVbZgfg7achxFeqlzUrU=0D32B338"
 domain = "zeynepuz200345.atlassian.net"
+
 
 url = f"https://{domain}/rest/api/3/search/jql"
 
@@ -25,9 +58,22 @@ headers = {
 }
 
 payload = {
-    "jql": "assignee = currentUser() ORDER BY created DESC",
+    "jql": "project = DEV ORDER BY assignee, created DESC",
     "maxResults": 50,
-    "fields": ["summary", "status"]
+    "fields": [
+        "summary",
+        "description",
+        "status",
+        "issuetype",
+        "priority",
+        "assignee",
+        "created",
+        "updated",
+        "parent",
+        "timeoriginalestimate",
+        "timespent",
+        "customfield_10016"
+    ]
 }
 
 response = requests.post(
@@ -39,102 +85,80 @@ response = requests.post(
 
 data = response.json()
 
-
-
-
 issues_list = []
 
 for issue in data.get("issues", []):
+    fields = issue.get("fields", {})
+
+    estimated_seconds = fields.get("timeoriginalestimate")
+    spent_seconds = fields.get("timespent")
+    story_points = fields.get("customfield_10016")
+
+    estimated_hours = (estimated_seconds / 3600) if estimated_seconds else 0
+    spent_hours = (spent_seconds / 3600) if spent_seconds else 0
+
+    description_data = fields.get("description")
+    if isinstance(description_data, dict):
+        description_text = str(description_data)
+    else:
+        description_text = description_data if description_data else ""
+
+    parent_data = fields.get("parent")
+    epic_value = parent_data.get("key", "") if isinstance(parent_data, dict) else ""
+
     issues_list.append({
-        "key": issue["key"],
-        "summary": issue["fields"]["summary"],
-        "status": issue["fields"]["status"]["name"],
-        "estimated_days": random.randint(1, 10),
-        "real_days": random.randint(1, 10)
+        "key": issue.get("key", ""),
+        "summary": fields.get("summary", ""),
+        "description": description_text,
+        "status": fields["status"]["name"] if fields.get("status") else "Unknown",
+        "issue_type": fields["issuetype"]["name"] if fields.get("issuetype") else "Unknown",
+        "priority": fields["priority"]["name"] if fields.get("priority") else "None",
+        "assignee": fields["assignee"]["displayName"] if fields.get("assignee") else "Unassigned",
+        "created": fields.get("created", ""),
+        "updated": fields.get("updated", ""),
+        "epic": epic_value,
+        "story_points": story_points if story_points else 0,
+        "estimated_hours": estimated_hours,
+        "spent_hours": spent_hours
     })
 
 df = pd.DataFrame(issues_list)
 
+if df.empty:
+    print("No Jira issues found.")
+    raise SystemExit
 
-# delay hesaplama
-df["delay"] = df["real_days"] > df["estimated_days"]
+print("\nDEBUG - ASSIGNEE CHECK\n")
+print(df[["key", "assignee", "status"]])
 
-# 🤖 AGENTS ÇALIŞIYOR
+# Time tracking yoksa story point'ten estimate üret
+df["estimated_hours"] = df.apply(
+    lambda row: row["estimated_hours"] if row["estimated_hours"] > 0 else row["story_points"] * 2,
+    axis=1
+)
+
+# Time spent yoksa geçici simülasyon
+df["spent_hours"] = df.apply(
+    lambda row: row["spent_hours"] if row["spent_hours"] > 0 else max(row["estimated_hours"] - 1, 0),
+    axis=1
+)
+
+df["delay"] = df["spent_hours"] > df["estimated_hours"]
+
+def predict_delay(estimated_hours):
+    return estimated_hours > 6
+
+df["predicted_delay"] = df["estimated_hours"].apply(predict_delay)
+
 df = calculate_risk(df)
-
 df = ai_recommendation(df)
-
 df = requirement_analysis(df)
+df = validate_task(df)
 
 team_capacity, total_effort = capacity_analysis(df)
 
-print("\nTASK TABLE\n")
-print(df)
-
-print("\nTEAM CAPACITY:", team_capacity)
-print("TOTAL EFFORT:", total_effort)
-
-project_context = build_context(df)
-
-print("\nPROJECT CONTEXT\n")
-
-for key,value in project_context.items():
-    print(key, ":", value)
-    
-    
-# grafik
-plt.figure()
-df["risk_score"].plot(kind="bar")
-
-plt.title("Task Risk Scores")
-plt.xlabel("Task")
-plt.ylabel("Risk")
-
-plt.savefig("risk_chart.png")
-
-
-create_pdf_report(df, total_effort, team_capacity)
-
-
-
-'''çalışıyordu sonrasında folderlara ayırdım.'''
-
-'''df["delay"] = df["real_days"] > df["estimated_days"]
-
-
-
-def predict_delay(estimated):
-    if estimated > 5:
-        return True
-    else:
-        return False
-
-
-df["predicted_delay"] = df["estimated_days"].apply(predict_delay)
-
-def risk_score(row):
-
-    score = 0
-
-    if row["delay"]:
-        score += 2
-
-    if row["estimated_days"] > 5:
-        score += 1
-
-    if row["status"] != "Done":
-        score += 1
-
-    return score
-
-df["risk_score"] = df.apply(risk_score, axis=1)
-
-
 total_risk = df["risk_score"].sum()
-
 average_risk = df["risk_score"].mean()
-
-
 
 print("\nTASK TABLE\n")
 print(df)
@@ -142,72 +166,56 @@ print(df)
 print("\nTotal risk:", total_risk)
 print("Average risk:", average_risk)
 
-plt.figure()
-df["risk_score"].plot(kind="bar")
+print("\nCAPACITY REPORT\n")
+print("Team capacity:", team_capacity)
+print("Total effort:", total_effort)
 
-plt.title("Task Risk Scores")
-plt.xlabel("Task")
-plt.ylabel("Risk Score")
+print("\nJIRA SUPPORT AGENT\n")
+print(jira_support_answer("Epic nedir?"))
+print(jira_support_answer("Story ile task farkı nedir?"))
 
-plt.savefig("risk_chart.png")
-
-
-
-def ai_recommendation(row):
-
-    if row["risk_score"] >= 3:
-        return "High risk → split task or add developer"
-
-    elif row["delay"]:
-        return "Delayed → increase priority"
-
-    elif row["status"] != "Done":
-        return "In progress → monitor"
-
-    else:
-        return "OK"
-
-
-df["recommendation"] = df.apply(ai_recommendation, axis=1)
+if total_effort > team_capacity:
+    print("Sprint overloaded")
+else:
+    print("Sprint feasible")
 
 print("\nAI RECOMMENDATIONS\n")
-
-print(
-    df[
-        [
-            "key",
-            "status",
-            "estimated_days",
-            "real_days",
-            "risk_score",
-            "recommendation",
-        ]
+print(df[
+    [
+        "key",
+        "status",
+        "issue_type",
+        "priority",
+        "story_points",
+        "estimated_hours",
+        "spent_hours",
+        "risk_score",
+        "recommendation",
+        "requirement_alignment",
+        "validation_result"
     ]
-)
+])
 
+print("\nVALIDATION REPORT\n")
+print(df[["key", "summary", "validation_result"]])
 
-
+print("\nVALIDATION SUMMARY\n")
+print(df["validation_result"].value_counts())
 
 print("\nSPRINT HEALTH REPORT\n")
 
 if average_risk < 1:
     print("Sprint status: LOW RISK")
-
 elif average_risk < 2:
     print("Sprint status: MEDIUM RISK")
-
 else:
     print("Sprint status: HIGH RISK")
 
-
 delayed_tasks = df[df["delay"] == True]
-
-print("\nDelayed tasks:", len(delayed_tasks))
-
 high_risk_tasks = df[df["risk_score"] >= 3]
 
+print("Delayed tasks:", len(delayed_tasks))
 print("High risk tasks:", len(high_risk_tasks))
-
 
 if len(high_risk_tasks) > 2:
     print("Recommendation: Add more developers to sprint")
@@ -217,92 +225,37 @@ if len(delayed_tasks) > 2:
 
 if average_risk > 2:
     print("Recommendation: Reduce sprint workload")
+
+df.to_csv("jira_dataset.csv", index=False)
+print("\nDataset saved as jira_dataset.csv")
+
+df[["key", "summary", "validation_result"]].to_csv("validation_report.csv", index=False)
+print("Validation report saved as validation_report.csv")
+
+
+plt.figure(figsize=(10, 5))
+df.set_index("key")["risk_score"].plot(kind="bar", color="skyblue")
+plt.title("Task Risk Scores")
+plt.xlabel("Task")
+plt.ylabel("Risk Score")
+plt.tight_layout()
+plt.savefig("risk_chart.png")
+print("Risk chart saved as risk_chart.png")
+
+print("\nWRITING COMMENTS TO JIRA\n")
+
+problem_tasks = df[
+    (df["validation_result"] != "Valid") | (df["risk_score"] >= 3)
+]
+
+for _, row in problem_tasks.iterrows():
+    comment = (
+    f"🤖 AI Sprint Analysis\n\n"
+    f"• Risk Score: {row['risk_score']}\n"
+    f"• Status: {row['status']}\n\n"
+    f"⚠️ Issues:\n{row['validation_result']}\n\n"
+    f"💡 Recommendation:\n{row['recommendation']}"
+)
     
-    
-    
-    
-print("\nVELOCITY REPORT\n")
+    add_jira_comment(row["key"], comment)
 
-done_tasks = df[df["status"] == "Tamam"]
-
-velocity = len(done_tasks)
-
-total_tasks = len(df)
-
-print("Total tasks:", total_tasks)
-print("Done tasks:", velocity)
-
-if total_tasks > 0:
-    velocity_rate = velocity / total_tasks
-else:
-    velocity_rate = 0
-
-print("Velocity rate:", velocity_rate)
-
-
-if velocity_rate > 0.7:
-    print("Sprint performance: GOOD")
-
-elif velocity_rate > 0.4:
-    print("Sprint performance: MEDIUM")
-
-else:
-    print("Sprint performance: LOW")    
-    
-    
-    
-pdf = FPDF()
-pdf.add_page()
-
-pdf.set_font("Arial", size=12)
-
-pdf.cell(200,10,"AI Sprint Report",ln=True)
-
-pdf.cell(200,10,f"Total Tasks: {len(df)}",ln=True)
-pdf.cell(200,10,f"Total Risk: {total_risk}",ln=True)
-pdf.cell(200,10,f"Average Risk: {average_risk}",ln=True)
-
-pdf.cell(200,10,"",ln=True)
-pdf.cell(200,10,"High Risk Tasks:",ln=True)
-
-for index,row in df.iterrows():
-    if row["risk_score"] >= 3:
-        pdf.cell(200,10,f'{row["key"]} - Risk:{row["risk_score"]}',ln=True)
-
-pdf.cell(200,10,"",ln=True)
-
-pdf.image("risk_chart.png", x=10, y=None, w=180)
-
-pdf.output("sprint_report.pdf")
-
-print("PDF REPORT CREATED")  
-
-
-
-
-print("\nCAPACITY ANALYSIS\n")
-
-team_members = 3
-hours_per_member = 40   # haftalık çalışma
-sprint_weeks = 2
-
-team_capacity = team_members * hours_per_member * sprint_weeks
-
-print("Team capacity (hours):", team_capacity)
-
-
-df["effort_hours"] = df["estimated_days"] * 6
-
-total_effort = df["effort_hours"].sum()
-
-print("Total sprint effort:", total_effort)
-
-
-print("\nSPRINT FEASIBILITY\n")
-
-if total_effort > team_capacity:
-    print("Sprint overloaded")
-    print("Recommendation: Reduce tasks")
-
-else:
-    print("Sprint feasible")'''
