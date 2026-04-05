@@ -1,18 +1,19 @@
 key,summary,validation_result
-DEV-17,do,Summary too short ; Description missing ; Epic link missing
-DEV-16,research,Description missing ; Epic link missing
-DEV-15,component share,Description missing ; Epic link missing
-DEV-14,organize,Description missing ; Epic link missing
-DEV-13, Share,Summary too short ; Description missing ; Epic link missing
-DEV-12,Trial DEMO,Description missing ; Epic link missing
-DEV-11,Data,Summary too short ; Epic link missing
-DEV-10,DEV- 10 WORKFLOW,Description missing ; Epic link missing
-DEV-9,DEV - 9 ANALYZING,Description missing ; Epic link missing
-DEV-8,DEV-8 AI CONTROL,Description missing ; Epic link missing
-DEV-7,Bir yapay zeka projesi,Description missing ; Epic link missing
-DEV-6,Add work to tracking tool,Epic link missing
-DEV-5,Validate feature functionality against identified user needs,Description missing ; Epic link missing ; Assignee missing
-DEV-4,Document technical specifications for the AI feature,Description missing ; Epic link missing ; Assignee missing
-DEV-3,Configure deployment pipeline for the feature release,Description missing ; Epic link missing ; Assignee missing
-DEV-2,Write unit tests for feature release components,Description missing ; Epic link missing ; Assignee missing
-DEV-1,Implement core logic for the new AI feature,Description missing ; Epic link missing ; Assignee missing
+DT-20,Testing the backend,Description missing
+DT-19,Hook up login page to web service REST API.,Description missing ; Assignee missing
+DT-18,Create web service REST API for user resource.,Description missing ; Assignee missing
+DT-17,Create SQL scripts for stored procedures.,Description missing
+DT-16,Create SQL scripts to create tables,Description missing
+DT-15,Implement login page HTML/CSS/JS.,Description missing
+DT-14,Cut SVG icons and images.,Description missing
+DT-13,Design login page.,Description missing
+DT-12,Setup Jenkins CI pipeline.,Assignee missing
+DT-11,Research and decide on unit test and mocking framework.,Assignee missing
+DT-10,Design overall (high-level) system architecture.,Assignee missing
+DT-9,"Setup GCP (or AWS) account, containers, and services",Assignee missing
+DT-8,Setup GitHub project repo,Valid
+DT-7,Facebook login support,Valid
+DT-6,Google login support,Valid
+DT-5,Forgot Password workflow. ,Valid
+DT-4,User Login screen,Valid
+DT-2,User Authentication,Valid

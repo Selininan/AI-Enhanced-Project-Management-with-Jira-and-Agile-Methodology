@@ -58,23 +58,19 @@ headers = {
 }
 
 payload = {
-    "jql": "project = DEV ORDER BY assignee, created DESC",
+   "jql": "project = 'DT' ORDER BY created DESC",
+   #bi önceki buydu değiştirdim projeyi almak için "jql": "project = DT ORDER BY assignee, created DESC'"
     "maxResults": 50,
-    "fields": [
-        "summary",
-        "description",
-        "status",
-        "issuetype",
-        "priority",
-        "assignee",
-        "created",
-        "updated",
-        "parent",
-        "timeoriginalestimate",
-        "timespent",
-        "customfield_10016"
+   "fields": [
+        "summary", "description", "status", "issuetype", "priority", 
+        "assignee", "created", "updated", "parent", "timeoriginalestimate", 
+        "timespent", "customfield_10016",
+        "customfield_10073" , "customfield_10016"
+       
     ]
 }
+
+# ... (Yukarıdaki url, headers ve payload kısımları aynı kalacak)
 
 response = requests.post(
     url,
@@ -85,11 +81,48 @@ response = requests.post(
 
 data = response.json()
 
+# SADECE ID'Yİ BULMAK İÇİN (Sonra silebilirsin)
+print("\n--- JIRA HAM VERİSİ ---")
+print(data.get("issues", [])[0]["fields"])
+raise SystemExit # Kodu burada durduralım ki terminal çok karışmasın
+
+# 1. İÇ İÇE LİSTELERİ (MADDE İŞARETLERİNİ) ÇÖZEN YENİ FONKSİYON
+def extract_text_from_adf(adf_data):
+    if isinstance(adf_data, dict):
+        if adf_data.get("type") == "text":
+            return adf_data.get("text", "")
+        if "content" in adf_data:
+            return " ".join(extract_text_from_adf(child) for child in adf_data["content"])
+    elif isinstance(adf_data, list):
+        return " ".join(extract_text_from_adf(item) for item in adf_data)
+    return ""
+
 issues_list = []
 
 for issue in data.get("issues", []):
     fields = issue.get("fields", {})
 
+    # 2. AÇIKLAMA (DESCRIPTION) ÇEKME (Maddeli listeler dahil)
+    desc_data = fields.get("description")
+    description_text = extract_text_from_adf(desc_data).strip() if desc_data else ""
+    
+    # 3. ATANAN KİŞİ (ASSIGNEE) KONTROLÜ
+    assignee_data = fields.get("assignee")
+    assignee_name = assignee_data["displayName"] if assignee_data else "Unassigned"
+
+    # 4. UZMANLIK ALANI ÇEKME (customfield_10073 üzerinden)
+    expertise_data = fields.get("customfield_10073") 
+    
+    if isinstance(expertise_data, dict):
+        expertise = expertise_data.get("value", "Belirtilmemiş")
+    elif expertise_data:
+        expertise = str(expertise_data)
+    else:
+        expertise = "Belirtilmemiş"
+
+  
+
+    # 5. ZAMAN VE DİĞER VERİLERİ ÇEKME
     estimated_seconds = fields.get("timeoriginalestimate")
     spent_seconds = fields.get("timespent")
     story_points = fields.get("customfield_10016")
@@ -97,23 +130,19 @@ for issue in data.get("issues", []):
     estimated_hours = (estimated_seconds / 3600) if estimated_seconds else 0
     spent_hours = (spent_seconds / 3600) if spent_seconds else 0
 
-    description_data = fields.get("description")
-    if isinstance(description_data, dict):
-        description_text = str(description_data)
-    else:
-        description_text = description_data if description_data else ""
-
     parent_data = fields.get("parent")
     epic_value = parent_data.get("key", "") if isinstance(parent_data, dict) else ""
 
+    # 6. TABLOYA (DATAFRAME) EKLENECEK LİSTEYİ OLUŞTURMA
     issues_list.append({
         "key": issue.get("key", ""),
         "summary": fields.get("summary", ""),
-        "description": description_text,
+        "description": description_text,       # Artık tertemiz, maddeli listeler dahil
         "status": fields["status"]["name"] if fields.get("status") else "Unknown",
         "issue_type": fields["issuetype"]["name"] if fields.get("issuetype") else "Unknown",
         "priority": fields["priority"]["name"] if fields.get("priority") else "None",
-        "assignee": fields["assignee"]["displayName"] if fields.get("assignee") else "Unassigned",
+        "assignee": assignee_name,             # Artık isimleri doğru alacak
+        "expertise": expertise,                # YENİ SÜTUN: Uzmanlık alanı eklendi!
         "created": fields.get("created", ""),
         "updated": fields.get("updated", ""),
         "epic": epic_value,
@@ -128,8 +157,10 @@ if df.empty:
     print("No Jira issues found.")
     raise SystemExit
 
-print("\nDEBUG - ASSIGNEE CHECK\n")
-print(df[["key", "assignee", "status"]])
+print("\nDEBUG - ASSIGNEE & EXPERTISE CHECK\n")
+print(df[["key", "assignee", "expertise", "status"]])
+
+# ... (Kodun geri kalanı yani df hesaplamaları ve agent çağrıları aynen devam edecek)
 
 # Time tracking yoksa story point'ten estimate üret
 df["estimated_hours"] = df.apply(
