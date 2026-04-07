@@ -3,6 +3,26 @@ from requests.auth import HTTPBasicAuth
 import pandas as pd
 import matplotlib.pyplot as plt
 
+from agents.risk_agent import calculate_risk
+from agents.capacity_agent import capacity_analysis
+from agents.recommendation_agent import ai_recommendation
+from agents.requirement_agent import requirement_analysis
+from agents.task_validation_agent import validate_task
+from agents.jira_support_agent import GUIDE_TEXT, GUIDE_SECTIONS, jira_support_answer
+
+
+# CONFIG
+email = "zeynepuz2003@gmail.com"
+api_token = "ATATT3xFfGF0TPa2jkYWlFSXnAhwlY0acmWFlW8Ri9p0qeFHXAclcY442pSN8IqqXZOisLemj2g--mGEISxL7dKmE-YWtUpcHzHpFYOHkDyeQO3-zKBRRjI1Dyx_Bs--uR5Rp4qzlMhf5m_1lHLE5XejwHExbjQITImqVbZgfg7achxFeqlzUrU=0D32B338"
+domain = "zeynepuz200345.atlassian.net"
+url = f"https://{domain}/rest/api/3/search/jql"
+
+headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+}
+
+
 def add_jira_comment(issue_key, comment_text):
     comment_url = f"https://{domain}/rest/api/3/issue/{issue_key}/comment"
 
@@ -36,57 +56,7 @@ def add_jira_comment(issue_key, comment_text):
     else:
         print(f"Failed to add comment to {issue_key}: {response.status_code}")
 
-    print(issue_key, response.status_code, response.text)
 
-from agents.risk_agent import calculate_risk
-from agents.capacity_agent import capacity_analysis
-from agents.recommendation_agent import ai_recommendation
-from agents.requirement_agent import requirement_analysis
-from agents.task_validation_agent import validate_task
-from agents.jira_support_agent import jira_support_answer
-
-email = "zeynepuz2003@gmail.com"
-api_token = "ATATT3xFfGF0TPa2jkYWlFSXnAhwlY0acmWFlW8Ri9p0qeFHXAclcY442pSN8IqqXZOisLemj2g--mGEISxL7dKmE-YWtUpcHzHpFYOHkDyeQO3-zKBRRjI1Dyx_Bs--uR5Rp4qzlMhf5m_1lHLE5XejwHExbjQITImqVbZgfg7achxFeqlzUrU=0D32B338"
-domain = "zeynepuz200345.atlassian.net"
-
-
-url = f"https://{domain}/rest/api/3/search/jql"
-
-headers = {
-    "Accept": "application/json",
-    "Content-Type": "application/json"
-}
-
-payload = {
-   "jql": "project = 'DT' ORDER BY created DESC",
-   #bi önceki buydu değiştirdim projeyi almak için "jql": "project = DT ORDER BY assignee, created DESC'"
-    "maxResults": 50,
-   "fields": [
-        "summary", "description", "status", "issuetype", "priority", 
-        "assignee", "created", "updated", "parent", "timeoriginalestimate", 
-        "timespent", "customfield_10016",
-        "customfield_10073" , "customfield_10016"
-       
-    ]
-}
-
-# ... (Yukarıdaki url, headers ve payload kısımları aynı kalacak)
-
-response = requests.post(
-    url,
-    headers=headers,
-    auth=HTTPBasicAuth(email, api_token),
-    json=payload
-)
-
-data = response.json()
-
-# SADECE ID'Yİ BULMAK İÇİN (Sonra silebilirsin)
-print("\n--- JIRA HAM VERİSİ ---")
-print(data.get("issues", [])[0]["fields"])
-raise SystemExit # Kodu burada durduralım ki terminal çok karışmasın
-
-# 1. İÇ İÇE LİSTELERİ (MADDE İŞARETLERİNİ) ÇÖZEN YENİ FONKSİYON
 def extract_text_from_adf(adf_data):
     if isinstance(adf_data, dict):
         if adf_data.get("type") == "text":
@@ -97,22 +67,52 @@ def extract_text_from_adf(adf_data):
         return " ".join(extract_text_from_adf(item) for item in adf_data)
     return ""
 
+
+def predict_delay(estimated_hours):
+    return estimated_hours > 6
+
+
+payload = {
+    "jql": "project = 'DT' ORDER BY created DESC",
+    "maxResults": 50,
+    "fields": [
+        "summary",
+        "description",
+        "status",
+        "issuetype",
+        "priority",
+        "assignee",
+        "created",
+        "updated",
+        "parent",
+        "timeoriginalestimate",
+        "timespent",
+        "customfield_10016",   # story points
+        "customfield_10073"    # expertise
+    ]
+}
+
+response = requests.post(
+    url,
+    headers=headers,
+    auth=HTTPBasicAuth(email, api_token),
+    json=payload
+)
+
+data = response.json()
+
 issues_list = []
 
 for issue in data.get("issues", []):
     fields = issue.get("fields", {})
 
-    # 2. AÇIKLAMA (DESCRIPTION) ÇEKME (Maddeli listeler dahil)
     desc_data = fields.get("description")
     description_text = extract_text_from_adf(desc_data).strip() if desc_data else ""
-    
-    # 3. ATANAN KİŞİ (ASSIGNEE) KONTROLÜ
+
     assignee_data = fields.get("assignee")
     assignee_name = assignee_data["displayName"] if assignee_data else "Unassigned"
 
-    # 4. UZMANLIK ALANI ÇEKME (customfield_10073 üzerinden)
-    expertise_data = fields.get("customfield_10073") 
-    
+    expertise_data = fields.get("customfield_10073")
     if isinstance(expertise_data, dict):
         expertise = expertise_data.get("value", "Belirtilmemiş")
     elif expertise_data:
@@ -120,9 +120,6 @@ for issue in data.get("issues", []):
     else:
         expertise = "Belirtilmemiş"
 
-  
-
-    # 5. ZAMAN VE DİĞER VERİLERİ ÇEKME
     estimated_seconds = fields.get("timeoriginalestimate")
     spent_seconds = fields.get("timespent")
     story_points = fields.get("customfield_10016")
@@ -133,16 +130,15 @@ for issue in data.get("issues", []):
     parent_data = fields.get("parent")
     epic_value = parent_data.get("key", "") if isinstance(parent_data, dict) else ""
 
-    # 6. TABLOYA (DATAFRAME) EKLENECEK LİSTEYİ OLUŞTURMA
     issues_list.append({
         "key": issue.get("key", ""),
         "summary": fields.get("summary", ""),
-        "description": description_text,       # Artık tertemiz, maddeli listeler dahil
+        "description": description_text,
         "status": fields["status"]["name"] if fields.get("status") else "Unknown",
         "issue_type": fields["issuetype"]["name"] if fields.get("issuetype") else "Unknown",
         "priority": fields["priority"]["name"] if fields.get("priority") else "None",
-        "assignee": assignee_name,             # Artık isimleri doğru alacak
-        "expertise": expertise,                # YENİ SÜTUN: Uzmanlık alanı eklendi!
+        "assignee": assignee_name,
+        "expertise": expertise,
         "created": fields.get("created", ""),
         "updated": fields.get("updated", ""),
         "epic": epic_value,
@@ -154,13 +150,11 @@ for issue in data.get("issues", []):
 df = pd.DataFrame(issues_list)
 
 if df.empty:
-    print("No Jira issues found.")
+    print("No JIRA issues found.")
     raise SystemExit
 
 print("\nDEBUG - ASSIGNEE & EXPERTISE CHECK\n")
 print(df[["key", "assignee", "expertise", "status"]])
-
-# ... (Kodun geri kalanı yani df hesaplamaları ve agent çağrıları aynen devam edecek)
 
 # Time tracking yoksa story point'ten estimate üret
 df["estimated_hours"] = df.apply(
@@ -175,10 +169,6 @@ df["spent_hours"] = df.apply(
 )
 
 df["delay"] = df["spent_hours"] > df["estimated_hours"]
-
-def predict_delay(estimated_hours):
-    return estimated_hours > 6
-
 df["predicted_delay"] = df["estimated_hours"].apply(predict_delay)
 
 df = calculate_risk(df)
@@ -204,6 +194,8 @@ print("Total effort:", total_effort)
 print("\nJIRA SUPPORT AGENT\n")
 print(jira_support_answer("Epic nedir?"))
 print(jira_support_answer("Story ile task farkı nedir?"))
+print(jira_support_answer("Task nasıl açılır?"))
+print(jira_support_answer("Bu task neden hatalı?"))
 
 if total_effort > team_capacity:
     print("Sprint overloaded")
@@ -242,7 +234,7 @@ elif average_risk < 2:
 else:
     print("Sprint status: HIGH RISK")
 
-delayed_tasks = df[df["delay"] == True]
+delayed_tasks = df[df["delay"] is True] if False else df[df["delay"] == True]
 high_risk_tasks = df[df["risk_score"] >= 3]
 
 print("Delayed tasks:", len(delayed_tasks))
@@ -263,7 +255,6 @@ print("\nDataset saved as jira_dataset.csv")
 df[["key", "summary", "validation_result"]].to_csv("validation_report.csv", index=False)
 print("Validation report saved as validation_report.csv")
 
-
 plt.figure(figsize=(10, 5))
 df.set_index("key")["risk_score"].plot(kind="bar", color="skyblue")
 plt.title("Task Risk Scores")
@@ -281,12 +272,19 @@ problem_tasks = df[
 
 for _, row in problem_tasks.iterrows():
     comment = (
-    f"🤖 AI Sprint Analysis\n\n"
-    f"• Risk Score: {row['risk_score']}\n"
-    f"• Status: {row['status']}\n\n"
-    f"⚠️ Issues:\n{row['validation_result']}\n\n"
-    f"💡 Recommendation:\n{row['recommendation']}"
-)
-    
+        f"🤖 AI Sprint Analysis\n\n"
+        f"• Risk Score: {row['risk_score']}\n"
+        f"• Status: {row['status']}\n\n"
+        f"⚠️ Issues:\n{row['validation_result']}\n\n"
+        f"💡 Recommendation:\n{row['recommendation']}"
+    )
     add_jira_comment(row["key"], comment)
 
+print("\nJIRA SUPPORT AGENT\n")
+print(jira_support_answer("Büyük işleri nasıl grupluyoruz?"))
+print(jira_support_answer("Görevi kime atıyoruz?"))
+print(jira_support_answer("Bu işin önceliğini nasıl belirlerim?"))
+print(jira_support_answer("Sprint ne demek?"))
+print(jira_support_answer("Story ile task farkı nedir?"))
+print(jira_support_answer("Task nasıl açılır?"))
+print(jira_support_answer("Bu task neden hatalı?"))

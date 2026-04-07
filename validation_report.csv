@@ -1,4 +1,42 @@
 key,summary,validation_result
+DT-58,Define Data Requirements and Structures,Assignee missing
+DT-57,Define User Interface Requirements,Assignee missing
+DT-56,Document exception flows,Assignee missing
+DT-55,Create the Use Case Model,Assignee missing
+DT-54,Mark high-risk use cases,Description missing ; Assignee missing
+DT-53,Mark high-value use cases,Description missing ; Assignee missing
+DT-52,Prioritize use cases by business value and risk,Description missing ; Assignee missing
+DT-51,Identify system and time-based actors,Assignee missing
+DT-50,List included capabilities,Description missing ; Assignee missing
+DT-49,Define in-scope and out-of-scope system elements,Description missing ; Assignee missing
+DT-48,Validate scope and boundary with stakeholders,Assignee missing
+DT-47,Define solution boundary and system interfaces,Assignee missing
+DT-46,Document measurable project objectives,Description missing ; Assignee missing
+DT-45,Review the problem statement with stakeholders,Description missing ; Assignee missing
+DT-44,Identify business goals and expected outcomes,Assignee missing
+DT-43,Define Project Scope and System Boundary,Assignee missing
+DT-42,Use Case Driven Requirements and Delivery Framework,Assignee missing
+DT-41,Build a traceability matrix,Epic link missing ; Assignee missing
+DT-40,Link requirements to use cases,Description missing ; Assignee missing
+DT-39,Create a separate requirements list,Assignee missing
+DT-38,Build a Traceable Requirements Structure,Assignee missing
+DT-37,Align user interface design with use cases,Assignee missing
+DT-36,Define user-facing system messages,Description missing ; Assignee missing
+DT-35,Document input validation rules,Description missing ; Assignee missing
+DT-34,"Define edits, validations, and messages",Assignee missing
+DT-33,Identify user interface touchpoints,Assignee missing
+DT-32,Define Interfaces and User Interaction Points,Assignee missing
+DT-31,Identify temporal actors and time triggers,Assignee missing
+DT-30,Differentiate roles from job titles,Description missing ; Assignee missing
+DT-29,List user roles interacting with the system,Description missing ; Assignee missing
+DT-28,Identify human actors by role,Assignee missing
+DT-27,Identify Actors and Their Roles,Assignee missing
+DT-26,Validate scope alignment with stakeholders,Assignee missing
+DT-25,Define business objectives for the system,Assignee missing
+DT-24,Document in-scope and out-of-scope elements,Description missing ; Assignee missing
+DT-23,Review the business problem and project vision,Description missing ; Assignee missing
+DT-22,Identify the target system boundary,Assignee missing
+DT-21,Define System Scope and Project Boundaries,Assignee missing
 DT-20,Testing the backend,Description missing
 DT-19,Hook up login page to web service REST API.,Description missing ; Assignee missing
 DT-18,Create web service REST API for user resource.,Description missing ; Assignee missing
@@ -11,9 +49,3 @@ DT-12,Setup Jenkins CI pipeline.,Assignee missing
 DT-11,Research and decide on unit test and mocking framework.,Assignee missing
 DT-10,Design overall (high-level) system architecture.,Assignee missing
 DT-9,"Setup GCP (or AWS) account, containers, and services",Assignee missing
-DT-8,Setup GitHub project repo,Valid
-DT-7,Facebook login support,Valid
-DT-6,Google login support,Valid
-DT-5,Forgot Password workflow. ,Valid
-DT-4,User Login screen,Valid
-DT-2,User Authentication,Valid

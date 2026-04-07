@@ -1,0 +1,481 @@
+EPIC:
+An epic represents a large body of work that can be broken down into individual tasks, stories, or bugs.
+
+STORY:
+A story represents a user requirement or feature from the end-user perspective.
+
+TASK:
+A task represents technical work needed to complete a story.
+
+SPRINT:
+A sprint is a short, time-boxed period where a team completes planned work.
+
+BACKLOG:
+Backlog is the list of all work items that need to be completed.
+
+ASSIGNEE:
+The person responsible for completing the task.
+
+PRIORITY:
+Indicates how important or urgent a task is.
+
+STORY POINT:
+Story points represent effort, not time.
+
+What is JIRA?:
+JIRA is an industry-leading project management tool that brings every team together to plan, track, and deliver any type of project with confidence. It is the single source of truth for your entire organization, empowering teams with the context to move quickly while staying connected to the greater business goal. Whether used to manage everyday tasks or scale complex projects, JIRA is where teams and AI come together to drive better outcomes, faster. Sign up for a live demo of JIRA.
+
+Who uses JIRA?:
+JIRA launched in 2002 as a work tracking and project management tool for all teams. Since then, over 300,000 companies worldwide have adopted JIRA. Its flexibility and AI-powered workflows support any project type, and its extensibility works with thousands of apps and integrations. JIRA enables cross-functional teams to work together, including:
+Software teams
+Marketing teams
+Project management teams
+Product management teams
+
+Dig into specific features:
+JIRA supports any project management process or methodology your team might need, from agile planning to fully customizable views, including lists, timelines, and Kanban and Scrum boards. JIRA gives you the AI-powered tools you need to unlock collaboration, stay aligned, and deliver your best work, together.
+
+Scrum board:
+The scrum framework enables software teams to manage complex projects by creating a culture of collaboration. The JIRA scrum board is the tool that unites teams around a single goal and promotes iterative, incremental delivery.
+
+Kanban board:
+Kanban is a common framework for agile and DevOps software development that provides transparency of work and team capacity. Kanban boards in JIRA help teams visualize their workflow, limit work-in-progress, and maximize efficiency.
+
+Timeline:
+The timeline view in JIRA is useful for planning large pieces of work several months in advance within a single project. Simple planning and dependency management features help your teams visual
+
+Insights:
+In JIRA, insights helps the team make data-driven decisions without leaving their current context. Insights source data from your JIRA boards and projects to present aggregated views of your team’s historical progress. Insights are currently available for scrum metrics in both company-managed and team-managed projects.
+
+Integrations:
+In JIRA, an app (sometimes called an add-on or plugin) is an installable component that supplements or enhances the functionality of your instance. You and your teams can spend less time managing work and more time building great software with over 3,000 JIRA apps that can be custom-tailored to fit any and every use case.
+
+JIRA for teams:
+JIRA launched in 2002 as a work tracking and project management tool for teams. Since then, over 300,000 companies globally have adopted JIRA for its flexibility to support any type of project and extensibility to work with thousands of apps and integrations.
+
+JIRA for project management teams:
+JIRA can be configured to fit any type of project. Teams can start with a project template or create their own custom workflow. JIRA work items, also known as tasks, track each piece of work that needs to pass through the workflow steps to completion. Customizable permissions enable admins to determine who can see and perform which actions. With all project information in place, reports can be generated to track progress, productivity, and ensure nothing slips. JIRA mobile app allows you to track and manage all aspects of your team's work in real time from the convenience of your favorite device.
+
+JIRA for software development teams:
+JIRA provides planning and tracking tools so teams can manage dependencies, feature requirements, and stakeholders from day one. CI/CD integrations facilitate transparency throughout the software development life cycle. When it’s ready to deploy, live production code status information is surfaced in the JIRA work item. Integrated feature flagging tools allow teams to roll out new features gradually and safely. Leverage JIRA alongside JIRA Service Management so your development, operations, and IT teams can speed service requests through to changes and releases.
+
+JIRA for marketing teams:
+JIRA gives marketing teams everything they need to align on initiatives and manage campaigns. Today’s marketing teams are just as responsible for helping deliver products as product teams, so bring marketing and product under one roof so you can plan, build, and launch products, together. Use JIRA marketing templates to help create, review, and distribute materials. With flexible views, your team can build campaigns with confidence and use AI to break work down into small, manageable pieces. Get true alignment and visibility into work happening across all marketing initiatives with one unified view, so you can make smarter, context-based decisions that ensures marketing is aligned to business goals.
+
+JIRA for design teams:
+JIRA lets design teams track design work alongside other teams and get better alignment and visibility into product development and business initiatives. Confidently plan seamless user experiences, collaborate on designs, and meet deadlines—without sacrificing creativity. Streamline your entire design pipeline by documenting requirements and allocating resources with JIRA, and seamlessly embed designs via the Figma integration for up-to-date team visibility. Automation and AI let you stay on top of deliverables, review cycles, and potential blockers so your team can focus on what they do best.
+
+JIRA for IT teams:
+From issue tracking to change management, JIRA streamlines projects and so your IT team can deliver reliable services to internal teams. JIRA’s flexible views let your team easily create, prioritize, and track issues, milestones, and deliverables. Collect and respond to internal requests and questions with JIRA’s easy drag-and-drop form builder. With summaries, dashboards, and insights, you can improve IT team performance with real-time data. Combine JIRA with JIRA Service Management and Guard for data protection and threat detection for IT project delivery made easy.
+
+JIRA for operations teams:
+JIRA helps operations teams conquer complex workflows from control processes to resource management. Monitor and plan dates, resourcing, and inventory to make sure you’re always a step ahead. Procurement is simple—JIRA let you give your employees one place to submit simple requests for new items and inventory. Setting up a form takes seconds and saves you hours. And since JIRA connects every team and project they’re working on, rolling out new processes is easier than ever.
+
+JIRA for program management:
+JIRA gives program managers everything they need to analyze projects and confidently communicate to stakeholders with clear visibility on progress and priorities. Use program management templates to help track projects, map dependencies, and build approval workflows across teams to keep goals on track. And with project summaries at your fingertips, you can plan smarter and stay on top of initiatives and projects.
+
+JIRA for product management teams:
+As ideas become committed deliverables, product managers need a plan for how to bring their product vision to life. In JIRA, teams can create a timeline to plan and track work and dependencies associated with a single project. If planning across multiple projects that ladder up to larger initiatives, teams can create a shared plan to visualize and communicate cross-functional work, dependencies, and capacity within a single source of truth. Teams can also connect and enhance their workflow with thousands of integrations for JIRA. Manage and collaborate on projects seamlessly with organized workflows, task tracking, and integrated knowledge management for documentation and discussion with Confluence Cloud. Prioritize, collaborate on, and deliver new product ideas with JIRA Product Discovery.
+
+JIRA for product management teams:
+As ideas become committed deliverables, product managers need a plan for how to bring their product vision to life. In JIRA, teams can create a timeline to plan and track work and dependencies associated with a single project. If planning across multiple projects that ladder up to larger initiatives, teams can create a shared plan to visualize and communicate cross-functional work, dependencies, and capacity within a single source of truth. Teams can also connect and enhance their workflow with thousands of integrations for JIRA. Manage and collaborate on projects seamlessly with organized workflows, task tracking, and integrated knowledge management for documentation and discussion with Confluence Cloud. Prioritize, collaborate on, and deliver new product ideas with JIRA Product Discovery.
+
+JIRA for DevOps teams:
+DevOps is a set of practices that works to automate and integrate the processes between software development and IT teams, so they can build, test, and release software faster and more securely. For teams practicing DevOps, JIRA is the backbone of Atlassian’s open, integrated toolchain known as Open DevOps. JIRA integrates with first- and third-party tools throughout the DevOps lifecycle, including code and version control tools like Bitbucket, GitHub, and Gitlab, documentation and knowledge management tools like Confluence, and monitoring and operating tools like Opsgenie. JIRA also integrates with tools across a variety of categories to help DevOps teams ship better software, faster, with a focus on best practices.
+
+JIRA for task management:
+Use Rovo AI to create tasks for yourself and members of your team to work on, complete with its details, due dates, and reminders. Then, utilize AI to breakdown larger items of work into subtasks. Allow others to watch the task to track its progress and stay up to date with email notifications. View all tasks on the board, list, or calendar view to easily visualize each’s status.
+
+JIRA for bug tracking:
+Bugs are just a name for to-do's stemming from problems within the software a team is building. It is important for teams to view all the tasks and bugs in the backlog so they can prioritize big picture goals. JIRA’s powerful workflow engine ensures that bugs are automatically assigned and prioritized once they are captured. Teams can then track a bug through to completion.
+
+JIRA for requirements & test case management:
+JIRA is the central hub for the coding, collaboration, and release stages. It integrates with a variety of quality assurance apps, and allows for customizable fields, workflows and screens. All of these enable teams to manage manual and automated tests in their software development cycle seamlessly and effectively.
+
+JIRA for campaign management:
+JIRA connects campaigns with product sprints and so you can launch campaigns as a team. Use our campaign management template to kickstart planning, and customize as you go. Quickly set up timelines, review processes, and deadlines along the way. Navigate dependencies and adapt to evolving timelines, deadlines, and scope—and connect campaigns directly to initiatives by staying aligned with company goals and objectives.
+
+7 steps to get started in JIRA: 
+JIRA is a project management tool for any team in your organization—from product to marketing and beyond—that needs to plan, organize, and track their work. JIRA’s seamless AI and flexible workflows can be customized for your team’s unique needs, meaning teams of all kinds can enjoy increased productivity and visibility as they march toward delivering their best work.
+Step 1 - Create a space
+Log into your JIRA site. In the top navigation, select the “Spaces” dropdown and select “Create space”.
+Step 2 - Pick a template
+There are dozens of JIRA templates, each of which is designed to get your team started quickly and successfully. Today, there are three templates specifically for software teams:
+Select a template that aligns most closely with your team’s unique way of working.
+Space Types
+For the scrum and kanban templates only, you will also be prompted to choose a space type. The fundamental difference between the two space types is how they are administered, and whether that occurs at the team level or at a company/JIRA admin level.
+!!! 
+Team-managed spaces are suited for independent teams who want to control their own working processes and practices in a self-contained space.
+Company-managed spaces are set up and maintained by JIRA admins. This space type is designed for teams who want to standardize a way of working across many teams, such as sharing a workflow.
+Step 3 - Set up your columns
+In JIRA, the board displays a selection of work items in columns, with each column representing a step in your team’s workflow for taking work through completion. Although there are many things you can configure on your board, we suggest just setting up columns for now. When you're getting started on a new JIRA space, it's important to make your board reflect the way your team works.
+How you setup the columns on your board in the scrum and kanban templates depends if you’re in a team-managed (directly from the board) or company-managed space (in board settings).
+Step 4 - Create a work item
+Work items are the building blocks of your JIRA space. A work item can represent a story, epic, bug, feature to be built, or any other task in your project. 
+Select “Create” in the top navigation. Your work item will appear in the backlog or board of the space.
+Step 5 - Connect your tools
+You and your teams can spend less time managing work and more time building great software with over 3,000 JIRA apps that can be custom-tailored to fit any and every use case. Build a unified workspace with 3000+ apps and integrations from the Atlassian Marketplace.
+Select the Cog in the right corner of the top navigation > Apps.
+-Click Find new apps.
+-Search by the app name, or choose a category. 
+-Follow the prompts to Install, Buy now, or start a Free trial.
+Step 6 - Invite your team
+Step 7 - Move work forward
+Now that your team has joined your JIRA site, you're ready to collaborate and track work together. If you're in a scrum project, you'll need to create and start a sprint to begin tracking work. If you're in a kanban project, you can start tracking work on the board. To track work items, move a work item from one column to another as it progresses through your team's workflow.
+Pro-tip!!
+Stay connected, and move work forward – anywhere, anytime in the palm of your hand with the JIRA Cloud app for iOS or Android.
+
+What is a JIRA space?:
+Typically, a space can be defined as a collection of tasks that need to be completed to achieve a certain outcome. In JIRA, a space can be thought of as a container used to organize and track those tasks, or work items, across the entire team.
+A JIRA space is highly configurable and can be easily customized to map around organizational structure, workflow, or level of agile maturity, making it the only tool to fit any team’s unique way of working. Your team can use a JIRA space to track and resolve bugs, launch a new feature, and more.
+Your spaces can be found in the top navigation in the “Spaces” drop down.
+
+What are key elements of a JIRA space?:
+As with any project, there are tasks that need to get done, folks that are making things happen, and processes to help move that work forward.
+Work items – JIRA spaces are big goals that have been broken down into small, bite-size pieces of work called work items.
+People – JIRA makes it easy for teams to plan and track work so you can accomplish more together. Invite users to your JIRA space to start collaborating. 
+Workflows – JIRA spaces are structured to follow a process, or workflow, to help move a work item from creation through to completion. These workflows can be created to match your team’s unique way of working. 
+
+What are JIRA space templates?:
+JIRA offers several space templates to help teams get set up quickly using projects tailored to a specific team (like HR or software) or use case. These templates include pre-configured work types, workflows, and other relevant features. Two of our most popular templates are the kanban and scrum templates. Visit JIRA templates library
+
+Structure a project in JIRA:
+There is no one-size fits all approach to structuring a project in JIRA. However, it may be helpful to recognize that JIRA projects are not intended to be bespoke or unique to a single outcome. Rather, they capture ongoing efforts. With that in mind, here are a few approaches you may want to consider when thinking about how to structure your project in JIRA:
+By team - Team-based projects are another common organizational model. This allows your work to mirror your social organization and is convenient in less cross-functional setups, as it allows for more straight forward project permission management.
+By business unit - You may want to organize around larger business units such as marketing, IT, etc. Types of work will likely fall into similar patterns, making setting up workflows - and issue types particularly - more convenient.
+By product - If you're a software development team looking to make heavy use of the JIRA release and versioning system, you'll want to give strong consideration to organizing your projects by releasable product or groups of work that share a common release cycle.
+Even within these categories, you can get as granular or as broad as you want. For example, if you structure by product, you can continue to sub-categorize by specific features.
+
+What is a JIRA board?:
+If agile is an iterative approach to project management and software development, then an agile board is a tool that helps teams plan, visualize, and manage that work. In JIRA, the board displays a selection of work items in columns, with each column representing a step in your team’s workflow for taking work through completion. A board accompanies each JIRA space by default and provides the team with a shared view of all work that hasn't started, work that is in progress, and work that is completed.
+
+How does a board differ from a space in JIRA?:
+A JIRA space houses the collection of all work items that need to be completed to achieve a particular goal. A JIRA board, on the other hand, is the tool used to manage those work items as they move from creation to completion.
+Boards are flexible tools that can be used variety of ways depending on the team’s unique way of working. For example:
+Teams that practice scrum use the board to display a prioritized selection of work that the team has committed to complete within a sprint, or time-boxed period. Work items outside of this selection can be found in the backlog.
+Teams that practice kanban use the board as their work management tool for all work items, moving each work item through the columns from creation to completion.
+Teams with larger projects or multiple workstreams use multiple or cross-space boards to more easily track and manage different types of work.
+
+What types of boards are available in JIRA?:
+JIRA offers two boards with unique features that make it easy for teams to start practicing agile methodologies and track their work. These boards come pre-configured and ready for use with our JIRA templates.
+Scrum Board – This board is great for teams that like to work in sprints, or time-boxed periods when a team works to complete a set amount of work.
+
+What are multiple and cross-space boards?:
+Please note: Multiple and cross-space boards are only available in company-managed spaces.
+
+Multiple boards:
+In JIRA, you can create multiple boards within a single company-managed space. Each board will only display work items that meet your specific criteria. While teams use multiple boards for a variety of reasons, there are several common use cases:
+-Different workstreams within a single space. Having multiple boards for each of those workstreams makes it easier for teams to track and manage their work.
+-Multiple teams working on a single project. Each team may have their own workflows and require different board configurations. Having multiple boards can give each team autonomy over how they want to work.
+-Lengthy processes involving various stakeholders. You can create a board for different parts of a long workflow, making it easier to manage different stages of the process.
+
+Cross-space boards:
+In JIRA, you can create cross-space boards that pull work items from multiple spaces. While teams use cross-spaces boards for a variety of reasons, there are several common use cases:
+-Summary view for executive leadership. Your organization may have multiple teams and projects. You can create a cross-space board to provide an overview, prioritize, and track tasks across all teams and spaces.
+-A team supports and does work across multiple spaces. A development team, for example, may be deploying software that impacts multiple spaces. A cross-space board would make it easier for the development team to track and manage all of their work.
+-Security reasons. Consider the following scenario: a consulting team uses JIRA to manage all client work, and wants to provide their clients with JIRA access to increase transparency. While the team may use a single space to manage all client work, the team can create cross-space boards with specific permissions for each client to ensure information security.
+
+What are swimlanes in a JIRA board?:
+A swimlane is a horizontal categorization of work in active sprints of a scrum board or on a kanban board. You can use swimlanes to help you better organize tasks of different categories, such as workstreams, users, application areas, and more.
+
+What is a JIRA workflow?:
+In JIRA, the path your work items take from creation to completion is called workflow. Each workflow is composed of a set of statuses and transitions that your work item moves through during its lifecycle and typically represents work processes within your organization. 
+A JIRA workflow represents the process your team uses to take a work item from creation to completion. 
+
+What is a workflow scheme?:
+Different types of work go through different processes. JIRA enables teams to more accurately capture their workflows by associating different workflows with different work types. Like a permission scheme, a workflow scheme refers to the set of associations between workflows and work types. Every space requires at least one workflow scheme, and a workflow scheme can be applied to multiple spaces.
+
+What is the workflow editor?:
+The workflow editor is a graphical tool that allows you to create, visualize, and edit the steps and transitions of a workflow. You will need to log in as a user with the 'JIRA System Administrators' global permission to access this functionality.
+
+What is the relationship between a workflow and a board?:
+In JIRA, a workflow is very closely related to the board. A workflow refers to the path your work items take from creation to completion. Each workflow is composed of statuses and transitions that your work item moves through during its lifecycle. A board is the tool used to visualize the work as it moves through your workflow.
+JIRA administrators often set up the board’s columns to match steps in the workflow. For teams with simple workflows, statuses available to work items in each column also mirror to the step in the workflow.
+
+How does the advanced configuration of workflows compare to automation rules?:
+Company-managed spaces come equipped with advanced configuration options so teams can easily map and streamline even the most complex workflows. For example, you can create Conditions to control whether a transition should be executed by a user in your instance.
+Similar capabilities exist as automation rules as part of Automation for JIRA. However, some key differences exist:
+Advanced workflow configurations are only associated to each space by a workflow scheme, whereas automaton rules can be applied to a variety of features.
+Advanced workflow configurations can be a bit more challenging to execute but are easier to manage at scale.
+Advanced workflow configurations can be less of a strain on hosting resources, as automation rules available per space vary between editions. Compare plans
+Advanced configuration of workflows is currently available only in company-managed spaces.
+
+What is a JIRA app?:
+In JIRA, an app (sometimes called an add-on or plugin) is an installable component that supplements or enhances the functionality of your instance. You and your teams can spend less time managing work and more time building great software with over 3,000 JIRA apps that can be custom-tailored to fit any and every use case. On average, software developers check 3.3 tools simply to discover the status of a project, while JIRA customers rely on fewer tools (2.3 tools), saving valuable time, and increasing productivity.
+
+What is Atlassian Marketplace?:
+JIRA integrates with the majority of the tools your team uses today to get work done. Atlassian partners with best-in-class technology companies, like Slack, Mircosoft, Google, Zoom, and more, so that your team can do its best work using the tools you already know and love.
+The Marketplace is home to thousands of apps that run the gamut from wildly popular tools to more niche, ready-to-use apps. Many of these apps and integrations are free and easy to set up.
+The Marketplace makes it easy to find relevant apps and integrations for your team. If you have specific tools to connect to JIRA, search for them on the Marketplace homepage. Alternately, you can surface apps by applying filters such as top-rated and trending
+
+Recommended tools for design teams:
+Automatically bring your most up-to-date designs into JIRA work items so your team can focus on engaging with your work and not trying to find it.
+-AdobeXD for JIRA
+-Invision
+-Figma
+-Gliffy
+-Draw.io
+-Balsamiq
+-Lucidchart
+-Miro
+
+Recommended tools for IT teams:
+From CI/CD to monitoring, alerting, and beyond - make magic happen with deep JIRA integrations with your favorite IT tools.
+-Opsgenie
+-Jenkins
+-Dynatrace
+-GitHub
+-Git integration for JIRA
+-Slack
+-Zendesk
+
+Recommended tools for software engineering teams:
+Build better software by connecting JIRA with your favorite DevOps tools.
+-Bitbucket Cloud
+-Optimizely
+-GitHub
+-LaunchDarkly
+-Jenkins
+-CircleCI
+-Zephyr for JIRA
+-Automation for JIRA
+
+What are reports?:
+JIRA has a range of reports that enable you to visualize trends about your project, versions, epics, sprints, and issues. Reports in JIRA can be categorized into 4 types
+Agile reports – Understand your team’s velocity, spot bottlenecks, and better predict future performance
+DevOps reports – Understand deployment pipeline and frequency to enable greater collaboration and streamline the product lifecycle
+Issue analysis reports – Understand the types of work your team is focused on and how your team is keeping up with the work
+Forecast and management reports – Evaluate your team’s capacity and better predict future performance
+
+What are dashboards?:
+In JIRA, a dashboard is a collection of “gadgets”, or pre-installed data displays, that show various types of real-time information to help you track and monitor your work across projects. Dashboards can be private or shared with other users on your instance. They can also contain information from a single or multiple projects, enabling you to access pertinent information from across your whole instance.
+Dashboards can be found in the top navigation in your JIRA site.
+
+What is a system dashboard?:
+When users log in to JIRA Cloud applications for the first time, they see the default dashboard. Only JIRA administrators can change the gadgets and the layout of this default dashboard to show the most important information for your team. 
+
+What are insights?:
+In JIRA, insights help the team make data-driven decisions without leaving their current context. Insights source data from your JIRA boards and projects to present aggregated views of your team’s historical progress. Insights are currently available for scrum metrics in both company-managed and team-managed projects.
+
+What are backlog insights?:
+These insights provide support for you and your team to make data driven decisions during sprint planning sessions and retrospectives all within the context of your backlog view.
+Sprint Commitment Insight
+This insight monitors a sprint’s workload based on the performance of the past five sprints, and tells you whether your team has over or under committed to work, based on the calculated target. This insight is based off of the estimation setting that’s enabled for your project.
+Issue Type Breakdown Insight
+This insights helps your team gain a better understanding of the different types of work (for example, bugs, tasks, or tech-debt) your team is taking on to make sure they are balancing out priorities that are in line with their overall objectives.
+
+What are board insights?:
+These insights give you and your team the ability to make make data-driven decisions about the health and scope of your current sprint to ensure work stays on track.
+-Sprint Progress Insight
+The Sprint Progress insight shows how the current sprint is pacing towards your goal. With this insight, your team can see the percentage of work by status, such as percentage of work that is done, in progress, or needs to get started. This Insight is a quick way for your team to review sprint progress during standup without having to navigate to specific reports.
+-Burndown Insight
+Burndown Insight brings the power of the burndown report directly into the context of your sprints to help you make faster decisions and diagnose issues without having to dive into your reports. By looking at the Burndown Insight, you can see what work that has been completed, and the total work remaining, in order to help predict your team's likelihood of completing the sprint in the time available.
+-Issues That Need Attention Insight
+This insight helps your team quickly see which issues are currently stuck, blocked or flagged for attention. By checking this insight during your daily stand up, your team can progress work faster by focusing attention towards issues that might impact sprint velocity if not quickly resolved.
+-Epic Progress Insight
+The epic progress insight helps your team connect the work you’re doing in your sprint to your larger epics. This could mean your sprint only contains issues working towards one epic, or, maybe your team chose to divide and conquer and add work to a sprint that helps to progress multiple epics. By monitoring your epic progress insight your team will be able to understand how your current sprint relates to progressing larger goals.
+
+jira-administrators :
+Typically contains people who are JIRA system administrators. By default, this group is a member of the 'Administrators' space role.
+has the 'JIRA Administrators' and the 'JIRA System Administrators' global permissions. 
+
+jira-users:
+Typically contains every JIRA user in your system. By default, this group is a member of the 'Users' space role.
+has the 'JIRA Users' and 'Bulk Change' global permissions.
+
+What are permissions and permissions schemes?:
+Permissions are settings that control what users can see and do within JIRA. For example, some permissions dictate whether users can create new spaces and whether a user can see a specific type of comment on a work item.
+A permission scheme refers to the varying combinations of permissions granted to groups, space roles, and users on a per-space basis. In many organizations, multiple spaces have the same needs regarding access rights. For example, only the specified space team may be authorized to assign and work on work items.
+Every space has a permission scheme. One permission scheme can be associated with multiple spaces. Permission schemes are copied from space to space to prevent having to set up permissions individually for every space.
+
+What types of permissions exist?:
+There are three types of permissions in JIRA applications: global permissions, space permissions, and work item permissions.
+Global permissions are system wide and are granted to groups of users.
+Space permissions are created within permission schemes, which are then assigned to specific spaces.
+Work item permissions are created within permission schemes, which are then assigned to specific spaces.
+
+Global Permissions:
+Global permissions refer to what users can do system-wide, such as whether users can see the other users in the application. These apply to applications as a whole, not individual spaces. Global permissions are granted to groups of users and can be set by a user with the JIRA system administrator permission or a user in a group with JIRA administrator access.
+Some examples of global permissions include:
+JIRA system administrators (Server only)
+Permission to perform all JIRA administration functions.
+JIRA administrators
+Permission to perform most JIRA administration functions.
+JIRA users
+Permission to log in to JIRA.
+Browse users
+Permission to view a list of all JIRA user names and group names. Used for selecting users/groups in popup screens. Enables auto-completion of user names in most 'User Picker' menus and popups.
+Make bulk changes
+Modify collections of work items at once, including these operations
+-Bulk edit
+-Bulk move
+-Bulk workflow transition
+-Bulk delete
+
+Space Permissions:
+Space permissions refer to what users can do in a space. Space permissions are first created within permission schemes, which are then assigned to specific spaces.
+Please note: Space admin cannot customize the permission schemes for a space. These permissions can be set by a user with the JIRA System administrator permission or a user in a group with administrator access.
+
+Work item Permissions:
+Work item permissions refer to what users can to a work item, within the bounds of the space’s permissions and are organized into security schemes. These permissions can be set by a user with the JIRA System administrator permission, a user in a group with admin access, or a space admin.
+
+What are space roles?:
+Space roles are a flexible way to associate users and/or groups with particular functions and spaces. They are similar in concept to groups, with the main difference being that group membership is global whereas space role membership is space-specific. Additionally, group membership can only be altered by JIRA administrators, whereas space role membership can be altered by space administrators. JIRA administrators can create, edit, and/or delete space roles according to your organization’s needs.
+Users are assigned space roles, and these roles are used in permission schemes to assign permissions to a user. These schemes are then leveraged by several spaces to administer their permissions.
+
+What is JQL?:
+Using search in JIRA can help you gain key project insights and answer questions that are relevant to the team. The three flavors of search in JIRA — quick, basic, and advanced — can help you find important information about your projects.
+Advanced search allows you to build structured queries using JIRA Query Language (JQL) to search for work items within and across projects. Query results can be saved and used as filters and views across JIRA (including boards).
+
+Basic structure of JQL queries:
+A typical JQL query consists of the following components: 
+Field: JQL fields represent different types of information, such as priority, fixVersion, or issue type. 
+Operator: Operators are the core of the query, relating the field to the value, with common examples including equals (=), not equals (!=), and less than (<). 
+Value and function: Values are the specific data points you’re searching for. JQL functions perform calculations or return dynamic results. 
+Keywords: JQL keywords are special words with predefined meanings, such as AND and OR. They're used to construct more complex queries. 
+Example: project = “Marketing Campaign” AND status = “In Progress”
+This structure lets users quickly formulate queries targeting specific issues or groups within JIRA. 
+
+Common JQL operators:
+=: Exact match. Example: Project = “Marketing Campaign”. This will return all issues that belong to the “Marketing Campaign” Project. 
+!=: Not equal to. Example: assignee != currentUser( ). This will find all issues not assigned to the current user, helping to identify tasks that might need attention from others.
+AND: Combines multiple conditions (all must be true). Example: priority = High AND status = Open. This will return only high-priority issues in an open status, helpful in identifying critical tasks that need immediate attention.
+OR: Combines multiple conditions (at least one must be true). Example: component = “User Interface” OR component = “API”. This will find issues related to the User Interface or API components, allowing you to view related work across different system parts.
+IN: Matches any value in a specified list. Example: status IN (“In Progress”, “Under Review”, “Testing”). This will return all issues in any of these three statuses, providing a quick way to see all active work items.
+
+Key JQL functions and how to use them:
+JQL functions enhance query capabilities by allowing users to perform more complex operations, sort results, and filter based on dynamic criteria. These functions include: 
+ORDER BY: Sorts results. Example: project = "Marketing" ORDER BY created DESC. This will return all issues in the Marketing project, sorted by creation date from newest to oldest, allowing you to identify the most recent tasks quickly.
+WAS: Finds issues that were in a particular state. Example: status WAS "Resolved" AND status = "Open." This will find all issues that were resolved but have since been reopened, helping to track recurring problems.
+CHANGED: Identifies issues modified within a timeframe. Example: status CHANGED AFTER -1w. This will return all issues whose status has changed in the last week, useful for reviewing recent progress or changes in your project.
+MEMBERSOF: Filters by group membership. Example: assignee IN MEMBERSOF("developers"). This will find all issues assigned to anyone in the "developers" group, allowing you to see the workload across a team.
+
+JQL examples for common JIRA use cases:
+Here are a few ways you can use JQL in JIRA. 
+Find all high-priority issues assigned to you: priority = High AND assignee = currentUser()
+List overdue issues in a specific project: project = "Customer Support" AND duedate < now() AND status != Closed
+Show recently created issues: created >= -7d ORDER BY created DES
+
+Advanced JQL techniques:
+Use advanced search with JQL to leverage custom fields and complex queries. 
+Using custom fields: "Custom Field Name" ~ "search term". Use JQL to search within custom fields, allowing for more tailored and specific queries based on your business’s unique data structure.
+Subqueries: project IN subTaskIssueTypes() AND assignee = currentUser(). Use JQL to create nested queries, enabling you to filter issues based on the results of another query, which is particularly useful for complex hierarchical relationships in your projects.
+Specific issue types: issuetype = Epic AND status != Done. Use JQL to target particular issue types and their statuses, helping you to track and manage specific categories of work across your projects.
+
+What is JIRA’s navigation?:
+Whether you’re switching between projects, tracking progress, or collaborating with your team, finding what you need quickly is essential. JIRA’s navigation is designed to be intuitive, flexible, and built to scale with your team’s needs. Key components of JIRA’s navigation includes,
+The top navigation or top bar: The top bar contains actions that affect your entire site. These include searching, creating, switching sites and apps, and accessing utility items like notifications, global settings, Rovo chat, and your account.
+The side navigation or sidebar: Navigation in JIRA starts from the sidebar, where you can work across multiple projects, access essential items, and use Atlassian apps.
+The project navigation: You can seamlessly switch between different views and explore features that pertain to the project you're viewing.
+The main content area: The main content area is your primary workspace, and this is where the actual work happens.
+
+What is JIRA’s top navigation?:
+The top navigation or top bar keeps the focus on your essential tasks, such as Search and Create. With just a few clicks, you can search and locate work items, pages, and projects.
+No matter where you are in JIRA, the top bar is always present, so you can locate your work easily. The actions and elements on the top bar remain the same between Atlassian apps for consistency and smooth navigation throughout the Atlassian apps.
+
+JIRA Navigation Steps: 
+-See your brand or product, and switch between Atlassian sites or apps
+-Access essentials like For you, Recent, Starred, and Apps
+-Browse available Projects and expand to navigate within them
+-View other navigation items like Dashboards
+-Go to Assets and Goals
+-Find More navigation items and Customize sidebar
+-Search across all products on your site, and Create issues and requests
+-Use AI Chat and find utility items like Notifications, Settings, and Account
+
+What is JIRA’s project navigation?:
+The horizontal project navigation in JIRA offers different views that allow software and business teams to work in a way that suits them, while staying connected all in one place.
+While the sidebar lets you seamlessly navigate between different JIRA projects, the project navigation allows you to change between different views and explore features that pertain to the project you're viewing. If you’re a project admin, you can customize the project navigation to suit your team’s needs and reduce clutter.
+
+What is the main content area?:
+This is your primary workspace, where you’ll work with projects, boards, and work items. Whether you're planning sprints, tracking issues, viewing a roadmap, or reviewing a board, this is the space where you see and interact with your work.
+The content in this space is dynamically updated based on your interaction with other navigation items.
+
+What is automation?:
+Automation allows you to focus on the work that matters, removing the need to perform manual, repetitive tasks by allowing your teams to automate their tasks, processes, and workflows. With our simple no-code rule builder, you can create automation rules to take care of everything from the most simple repetitive tasks to the most complex scenarios - all in a few clicks.
+
+What are key elements of automation rules?:
+Automation rules are made up of three parts: triggers that kick off the rule, conditions that refine the rule, and actions that perform tasks in your site.
+Triggers, conditions, and actions are the building blocks of automation. Simply combine these components to create rules that can do anything from auto-closing old work items to notifying specific teams when a release has been shipped.
+You can find some automation templates to help you get started within the product library.
+
+What are triggers?:
+Every rule starts with a trigger. They kick off the execution of your rules. Triggers will listen for events in JIRA, such as when a work item is created or when a field value is changed. You can also trigger rules to run from third party services like Bitbucket or GitHub.
+Triggers can be set to run manually, based on a condition you set or scheduled.
+
+What are conditions?:
+Conditions allow you to narrow the scope of your rule. They must be met for your rule to continue running. For example, you can set up your rule to only escalate a work item if it is high priority.
+If a condition fails, the rule will stop running and no actions following the condition will be performed.
+
+What are actions?:
+Actions are the doers of your rule. They allow you to automate tasks and make changes within your site. They allow you to perform many tasks, such as editing a work item, sending a notification, or creating sub-tasks.
+
+What is branching?:
+Work items in JIRA rarely exist in isolation. They often contain sub-tasks, are stories that are part of a larger epic, or are simply linked to other work items using certain relationships. This means that when using automation, actions often need to apply, not only to the source work item that triggered the rule, but also to any work items that are related to the source work item.
+Special conditions and actions are available to create powerful rules that can work across complex work item relationships. For example, checking that all sub-tasks of a parent work item are resolved.
+
+What is a rule actor?:
+The rule actor is the user who executes a rule. This user must have the relevant permissions to trigger the rule, and complete any actions that may be performed. For example, if a rule is created that will comment on a work item when executed, the rule actor must have the Add comment permission, otherwise the rule will result in an error.
+In your site, the rule actor will be set as Automation app user. However, you can now change the rule actor for your automation rules.
+
+What is a rule status?:
+You can view the status of an automation rule to identify if the rule is currently active or not. If a rule is inactive, it will not execute until it is enabled. The status of a rule can be seen on its details screen.
+ENABLED The rule is currently active.
+DISABLED The rule is not currently in use.
+DRAFT The rule has unpublished changes.
+
+What is an audit log?:
+Each of your rules will have an audit log that you can review to see when the rule was triggered, the final result of the execution, and any actions that may have been performed.
+You can view the audit log of an individual rule, project-wide or at a global level. Reviewing your audit logs is an effective way of debugging your rules.
+
+What is the timeline view?:
+The timeline is a planning view available in all JIRA plans that allows you to plan work, track progress, and map dependencies within a single team and project. Both team-managed and company-managed projects are supported in the timeline view.
+
+What are epics?:
+In JIRA, epics represent large bodies of work that can be broken down into individual tasks. This work becomes a child issue of the epic, which is sometimes referred to as the parent issue. Issues are displayed as colored bars on the timeline. 
+
+What are child issues?:
+Child issues can be created directly in the timeline view and are nested within the epic they belong to. The most common child issues are stories, tasks, and bugs, but you can create new issue types to represent different pieces of work for your teams.
+Quickly move issues to other epics and reorder issues or epics by dragging and dropping them directly on the timeline.
+
+What is advanced planning in JIRA?:
+Advanced planning is a set of capabilities offered within a feature called Plans.
+Plans enables teams of teams to plan and track cross-functional work, such as a program or initiative. Within a plan, you can schedule work, allocate capacity, map dependencies, and model different scenarios, all within a single source of truth.
+Plans pulls data from boards, spaces, and filters in JIRA to visualize work in a customizable interface. Functioning as a sandbox environment, you can plan and experiment before updating your original data in JIRA.
+This guide explains the key concepts of advanced planning including how to create your first plan and best practices for a seamless planning experience.
+
+How do I create a plan?:
+The easiest way to get started with Plans is using our top-level planning template. The template comes with a plan, space, and work item hierarchy all pre-configured to help your teams manage large, cross-functional efforts, such as a program or initiative.
+Optionally, you can also create a sample plan. This generates a plan using dummy data so you can quickly get an idea of what a fully baked plan looks like and explore its capabilities in a risk-free way.
+Once you’ve built your own plans to support your teams' processes, scaling its structure is easy. Any plan can be duplicated in a few clicks. The copy will contain the same work items and settings of the original. This allows you to reuse an existing plan for multiple applications from supporting similar use cases to standardizing agile planning best practices across the organization.
+
+How do I add work item sources to a plan?:
+Work item sources determine what data will be used in JIRA to create a plan. They outline the work to be done and the problems you’re trying to solve. work item sources are first selected during plan creation and can be adjusted at any time.
+
+How do I add my teams to a plan?:
+Associate teams with your plan’s work item sources so their work can be managed directly in the plan. Any Atlassian teams in your Teams directory can be brought into a plan. Teams allow you to group and filter work based on teams and manage the allocation of work based on capacity.
+The coordination of teams is usually led by project or program managers, depending on how the work is structured. By prioritizing goals and determining critical paths, they are the drivers and decision-makers of the cross-functional plan. Team and domain leads contribute to the plan by managing capacity and allocating work to their respective teams.
+
+How do I manage team capacity in a plan?:
+Capacity reveals the units of work that a team undertakes in a given period of time. It can be used to estimate a team’s ability to complete work within a particular timeframe and is invaluable for evaluating risk when making key decisions.
+Capacity is added to the plan by team and domain leads who regularly use resource management systems to assess their team’s availability, resource allocation, and the prioritization of other projects.
+Measuring capacity differs between scrum and kanban teams. While both types of teams can measure capacity with time (days or hours), a scrum team can also use story points (a relative estimation of required effort). This is because scrum teams work in time-boxed iterations (sprints), while kanban teams progress through a continual flow of work.
+Capacity planning is available to both scrum and kanban teams. However, sprint planning is exclusive to teams that use scrum boards as a work item source. The sprint planning feature allows you to allocate work to each sprint, project release dates, or milestones based on teams' capacities. It can also show you when sprints are overbooked (when allocated work exceeds the team’s capacity).
+
+How do I manage dependencies in a plan?:
+Dependencies show the relationship between work items in your plan, such as contingencies and blockers. Visualizing and understanding dependencies is vital when project or program managers determine a critical path in the plan. When dependencies are thoroughly mapped, a team can adapt and plan for alternative paths.
+A dependency can be incoming or outgoing. It reveals when an work item blocks other work items, or is blocked, and what work items to prioritize to ensure that work progresses. You can choose to have dependencies displayed as badges or lines in the view settings on your plan.
+
+How do I manage releases in a plan?:
+Releases are the milestones in a plan that marks a point in time when work needs to be completed. Depending on how your work is structured, a release can represent a shippable chunk of work, a release to customers, or a program increment.
+Any future releases tied to a space in your plan will automatically appear in the Releases tab in Plans. To exclude a release (and its work items) from the plan, you can add an exclusion rule upon plan creation.
+Plans use two different types of releases: single-space and cross-space. A single-space release is tied to one JIRA space, while a cross-space release aligns the dates of multiple. Both release types can be created and edited in the Releases tab, however, cross-space releases are only used in Plans and cannot be saved to your work items in JIRA.
+
+How do I share a plan with stakeholders?:
+Plans are made to be shared! Communicate progress updates and keep all stakeholders informed on how projects and teams are tracking towards their goals. Any view of any plan can be shared as direct link, embedded in a Confluence page for a live view, or exported as a CSV file or PNG image for a static view.
+
+How do I plan for different scenarios?:
+Since Plans functions as a sandbox environment for JIRA data, you can enable scenarios to explore alternative paths to milestones or project completion. Planning different scenarios allows you to adjust dates, resources, and other inputs with minimal disruption. You can aim for your best case, plan for your worst case, and be prepared for anything in between.
+
+How do I track and report progress of a plan?:
+The summary screen is a great place to get a quick snapshot of how your plan is coming along. In the summary, you can see work item progress, key dependencies, team progress, and team capacity for your plan, in the chosen date range.

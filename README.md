@@ -1,2 +1,2 @@
-# AI-Enhanced-Project-Management-with-Jira-and-Agile-Methodology
-AI-Enhanced Project Management with Jira and Agile Methodology Capstone Project 
+# AI-Enhanced-Project-Management-with-JIRA-and-Agile-Methodology
+AI-Enhanced Project Management with JIRA and Agile Methodology Capstone Project 
