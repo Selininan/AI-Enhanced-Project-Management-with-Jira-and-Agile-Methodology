@@ -176,7 +176,7 @@ df = ai_recommendation(df)
 df = requirement_analysis(df)
 df = validate_task(df)
 
-team_capacity, total_effort = capacity_analysis(df)
+team_capacity, total_effort, bottleneck_report = capacity_analysis(df)
 
 total_risk = df["risk_score"].sum()
 average_risk = df["risk_score"].mean()
@@ -184,18 +184,19 @@ average_risk = df["risk_score"].mean()
 print("\nTASK TABLE\n")
 print(df)
 
+#DİL DEĞİŞECEK.
 print("\nTotal risk:", total_risk)
 print("Average risk:", average_risk)
 
 print("\nCAPACITY REPORT\n")
-print("Team capacity:", team_capacity)
-print("Total effort:", total_effort)
+print(f"Genel Takım Kapasitesi: {team_capacity} Saat")
+print(f"Sprintteki Toplam İş Yükü: {total_effort} Saat")
+print("-" * 30)
+for report in bottleneck_report:
+    print(report)
+print("-" * 30)
 
-print("\nJIRA SUPPORT AGENT\n")
-print(jira_support_answer("Epic nedir?"))
-print(jira_support_answer("Story ile task farkı nedir?"))
-print(jira_support_answer("Task nasıl açılır?"))
-print(jira_support_answer("Bu task neden hatalı?"))
+
 
 if total_effort > team_capacity:
     print("Sprint overloaded")
@@ -281,10 +282,16 @@ for _, row in problem_tasks.iterrows():
     add_jira_comment(row["key"], comment)
 
 print("\nJIRA SUPPORT AGENT\n")
-print(jira_support_answer("Büyük işleri nasıl grupluyoruz?"))
-print(jira_support_answer("Görevi kime atıyoruz?"))
-print(jira_support_answer("Bu işin önceliğini nasıl belirlerim?"))
-print(jira_support_answer("Sprint ne demek?"))
-print(jira_support_answer("Story ile task farkı nedir?"))
-print(jira_support_answer("Task nasıl açılır?"))
-print(jira_support_answer("Bu task neden hatalı?"))
+print("-" * 40)
+print(jira_support_answer("What is the difference between a story and a task?"))
+print("-" * 40)
+print(jira_support_answer("Why is this task invalid?"))
+print("-" * 40)
+print(jira_support_answer("Who actually uses Jira in our company?"))
+print("-" * 40)
+print(jira_support_answer("How can I share my plan with the stakeholders?"))
+print("-" * 40)
+print(jira_support_answer("What if I want to plan for different worst-case scenarios?"))
+print("-" * 40)
+print(jira_support_answer("How do I track the progress of my team?"))
+print("-" * 40)
