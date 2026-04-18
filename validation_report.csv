@@ -1,4 +1,42 @@
 key,summary,validation_result
+DT-96,T-3.2.1 — Build n8n daily 09:00 scheduler workflow,Assignee missing
+DT-95,T-3.1.3 — Claude API English summary text generation,Assignee missing
+DT-94,T-3.1.2 — Build capacity report dashboard UI,Assignee missing
+DT-93,T-3.1.1 — Connect capacity agent to FastAPI endpoint,Assignee missing
+DT-92,T-2.3.2 — Build filter panel UI component,Assignee missing
+DT-91,T-2.3.1 — Build filter API parameters and query optimization,Assignee missing
+DT-90,T-2.2.2 — Build critical stock email notification service,Assignee missing
+DT-89,T-2.2.1 — Build stock update API and validation,Assignee missing
+DT-88,T-2.1.3 — Performance and stock color code test,Assignee missing
+DT-87,T-2.1.2 — Build product list and search UI component,Assignee missing
+DT-86,T-2.1.1 — Build product listing API endpoint,Assignee missing
+DT-85,T-1.3.3 — Permission control and security test,Assignee missing
+DT-84,T-1.3.2 — Build log listing and Excel export UI,Assignee missing
+DT-83,T-1.3.1 — Build audit log service and database table,Assignee missing
+DT-82,T-1.2.2 — Build user management screen UI,Assignee missing
+DT-81,T-1.2.1 — Implement role-based access control (RBAC) backend,Assignee missing
+DT-80,T-1.1.3 — SSO login flow integration tests,Assignee missing
+DT-79,T-1.1.2 — Build login page UI,Assignee missing
+DT-78,T-1.1.1 — Implement OAuth 2.0 / Azure AD integration,Assignee missing
+DT-77,S-4.3 — FastAPI should be able to serve all agents as HTTP endpoints,Assignee missing
+DT-76,S-4.2 — n8n should be able to listen to Jira events and trigger agents,Assignee missing
+DT-75,S-4.1 — Developer environment should be secure and reproducible,Assignee missing
+DT-74,S-3.3 — BRD alignment score should be automatically generated when a new task is created,Assignee missing
+DT-73,S-3.2 — PM should receive sprint summary on Teams every morning,Assignee missing
+DT-72,S-3.1 — PM should be able to get a capacity report before the sprint starts,Assignee missing
+DT-71,S-2.3 — User should be able to filter products by category and price,Assignee missing
+DT-70,S-2.2 — Product manager should be able to update stock quantity,Assignee missing
+DT-69,S-2.1 — Warehouse staff should be able to view the product list,Assignee missing
+DT-68,S-1.3 — PM should be able to view user activity history,Assignee missing
+DT-67,S-1.2 — System administrator should be able to assign user roles,Assignee missing
+DT-66,S-1.1 — Admin user should be able to log in via SSO,Assignee missing
+DT-65,EP-4 — Integration & API,Assignee missing
+DT-64,EP-3 — Reporting & Analysis,Assignee missing
+DT-63,EP-2 — Product Catalog / Inventory,Assignee missing
+DT-62,EP-1 — User Management,Assignee missing
+DT-61,Admin should be able to assign user roles,Valid
+DT-60,Admin should be able to log in via SSO,Valid
+DT-59,User Management,Valid
 DT-58,Define Data Requirements and Structures,Assignee missing
 DT-57,Define User Interface Requirements,Assignee missing
 DT-56,Document exception flows,Assignee missing
@@ -11,41 +49,3 @@ DT-50,List included capabilities,Description missing ; Assignee missing
 DT-49,Define in-scope and out-of-scope system elements,Description missing ; Assignee missing
 DT-48,Validate scope and boundary with stakeholders,Assignee missing
 DT-47,Define solution boundary and system interfaces,Assignee missing
-DT-46,Document measurable project objectives,Description missing ; Assignee missing
-DT-45,Review the problem statement with stakeholders,Description missing ; Assignee missing
-DT-44,Identify business goals and expected outcomes,Assignee missing
-DT-43,Define Project Scope and System Boundary,Assignee missing
-DT-42,Use Case Driven Requirements and Delivery Framework,Assignee missing
-DT-41,Build a traceability matrix,Epic link missing ; Assignee missing
-DT-40,Link requirements to use cases,Description missing ; Assignee missing
-DT-39,Create a separate requirements list,Assignee missing
-DT-38,Build a Traceable Requirements Structure,Assignee missing
-DT-37,Align user interface design with use cases,Assignee missing
-DT-36,Define user-facing system messages,Description missing ; Assignee missing
-DT-35,Document input validation rules,Description missing ; Assignee missing
-DT-34,"Define edits, validations, and messages",Assignee missing
-DT-33,Identify user interface touchpoints,Assignee missing
-DT-32,Define Interfaces and User Interaction Points,Assignee missing
-DT-31,Identify temporal actors and time triggers,Assignee missing
-DT-30,Differentiate roles from job titles,Description missing ; Assignee missing
-DT-29,List user roles interacting with the system,Description missing ; Assignee missing
-DT-28,Identify human actors by role,Assignee missing
-DT-27,Identify Actors and Their Roles,Assignee missing
-DT-26,Validate scope alignment with stakeholders,Assignee missing
-DT-25,Define business objectives for the system,Assignee missing
-DT-24,Document in-scope and out-of-scope elements,Description missing ; Assignee missing
-DT-23,Review the business problem and project vision,Description missing ; Assignee missing
-DT-22,Identify the target system boundary,Assignee missing
-DT-21,Define System Scope and Project Boundaries,Assignee missing
-DT-20,Testing the backend,Description missing
-DT-19,Hook up login page to web service REST API.,Description missing ; Assignee missing
-DT-18,Create web service REST API for user resource.,Description missing ; Assignee missing
-DT-17,Create SQL scripts for stored procedures.,Description missing
-DT-16,Create SQL scripts to create tables,Description missing
-DT-15,Implement login page HTML/CSS/JS.,Description missing
-DT-14,Cut SVG icons and images.,Description missing
-DT-13,Design login page.,Description missing
-DT-12,Setup Jenkins CI pipeline.,Assignee missing
-DT-11,Research and decide on unit test and mocking framework.,Assignee missing
-DT-10,Design overall (high-level) system architecture.,Assignee missing
-DT-9,"Setup GCP (or AWS) account, containers, and services",Assignee missing
