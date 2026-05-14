@@ -4,7 +4,7 @@ BAI-44,Write unit tests for stock API,Epic link missing
 BAI-43,Set up database migration scripts,Valid
 BAI-42,Update dashboard layout,Valid
 BAI-41,Fix,Summary too short
-BAI-40,Fix authentication bug,Assignee missing
+BAI-40,Fix authentication bug,Valid
 BAI-39,T-4.2.1 — Configure n8n Jira webhook listener,Valid
 BAI-38,T-4.3.1 — Implement all FastAPI endpoints,Valid
 BAI-37,T-4.1.1 — Create config.py and .env setup,Valid
