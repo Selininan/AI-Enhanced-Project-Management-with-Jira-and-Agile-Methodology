@@ -20,7 +20,7 @@ load_dotenv()
 email = os.getenv("JIRA_EMAIL")
 api_token = os.getenv("JIRA_API_TOKEN")
 domain = os.getenv("JIRA_DOMAIN")
-project_key = os.getenv("JIRA_PROJECT_KEY", "DT")
+project_key = os.getenv("JIRA_PROJECT_KEY", "BAI")
 url = f"https://{domain}/rest/api/3/search/jql"
 
 headers = {
@@ -95,7 +95,7 @@ def fetch_and_analyze():
             "timeoriginalestimate",
             "timespent",
             "customfield_10016",   # story points
-            "customfield_10073"    # expertise
+            "customfield_10139"    # expertise (BAI projesi)
         ]
     }
 
@@ -119,7 +119,7 @@ def fetch_and_analyze():
         assignee_data = fields.get("assignee")
         assignee_name = assignee_data["displayName"] if assignee_data else "Unassigned"
 
-        expertise_data = fields.get("customfield_10073")
+        expertise_data = fields.get("customfield_10139")
         if isinstance(expertise_data, dict):
             expertise = expertise_data.get("value", "Belirtilmemiş")
         elif expertise_data:
