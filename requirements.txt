@@ -3,3 +3,5 @@ pandas
 matplotlib
 fpdf
 python-dotenv
+fastapi
+uvicorn
