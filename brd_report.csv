@@ -1,0 +1,45 @@
+key,summary,brd_score,brd_reasoning
+BAI-45,Integrate Teams notification service,0.0,Gemini API error: 400
+BAI-44,Write unit tests for stock API,0.0,Gemini API error: 404
+BAI-43,Set up database migration scripts,0.0,Gemini API error: 404
+BAI-42,Update dashboard layout,0.0,Gemini API error: 404
+BAI-41,Fix,0.0,Gemini API error: 404
+BAI-40,Fix authentication bug,0.0,Gemini API error: 404
+BAI-39,T-4.2.1 — Configure n8n Jira webhook listener,0.0,Gemini API error: 404
+BAI-38,T-4.3.1 — Implement all FastAPI endpoints,0.0,Gemini API error: 404
+BAI-37,T-4.1.1 — Create config.py and .env setup,0.0,Gemini API error: 404
+BAI-36,T-3.2.1 — Build n8n daily 09:00 scheduler workflow,0.0,Gemini API error: 404
+BAI-35,T-3.1.3 — Claude API English summary text generation,0.0,Gemini API error: 404
+BAI-34,T-3.1.2 — Build capacity report dashboard UI,0.0,Gemini API error: 503
+BAI-33,T-3.1.1 — Connect capacity agent to FastAPI endpoint,0.0,Gemini API error: 404
+BAI-32,T-2.3.2 — Build filter panel UI component,0.0,Gemini API error: 404
+BAI-31,T-2.3.1 — Build filter API parameters and query optimization,0.0,Gemini API error: 404
+BAI-30,T-2.2.2 — Build critical stock email notification service,0.0,Gemini API error: 404
+BAI-29,T-2.2.1 — Build stock update API and validation,0.0,Gemini API error: 404
+BAI-28,T-2.1.3 — Performance and stock color code test,0.0,Gemini API error: 404
+BAI-27,T-2.1.2 — Build product list and search UI component,0.0,Gemini API error: 404
+BAI-26,T-2.1.1 — Build product listing API endpoint,0.0,Gemini API error: 404
+BAI-25,T-1.3.3 — Permission control and security test,0.0,Gemini API error: 404
+BAI-24,T-1.3.2 — Build log listing and Excel export UI,0.0,Gemini API error: 404
+BAI-23,T-1.3.1 — Build audit log service and database table,0.0,Gemini API error: 404
+BAI-22,T-1.2.2 — Build user management screen UI,0.0,Gemini API error: 404
+BAI-21,T-1.2.1 — Implement RBAC backend,0.0,Gemini API error: 404
+BAI-20,T-1.1.3 — SSO login flow integration tests,0.0,Gemini API error: 404
+BAI-19,T-1.1.2 — Build login page UI,0.0,Gemini API error: 404
+BAI-18,T-1.1.1 — Implement OAuth 2.0 / Azure AD integration,0.0,Gemini API error: 404
+BAI-17,S-4.3 — FastAPI should serve all agents as HTTP endpoints,0.0,Gemini API error: 404
+BAI-16,S-4.2 — n8n should be able to listen to Jira events and trigger agents,0.0,Gemini API error: 404
+BAI-15,S-4.1 — Developer environment should be secure and reproducible,0.0,Gemini API error: 404
+BAI-14,S-3.3 — BRD alignment score generated automatically when task is created,0.0,Gemini API error: 400
+BAI-13,S-3.2 — PM should receive sprint summary on Teams every morning,0.0,Gemini API error: 404
+BAI-12,S-3.1 — PM should be able to get a capacity report before the sprint starts,0.0,Gemini API error: 404
+BAI-11,S-2.3 — User should be able to filter products by category and price,0.0,Gemini API error: 404
+BAI-10,S-2.2 — Product manager should be able to update stock quantity,0.0,Gemini API error: 404
+BAI-9,S-2.1 — Warehouse staff should be able to view the product list,0.0,Gemini API error: 404
+BAI-8,S-1.3 — PM should be able to view user activity history,0.0,Gemini API error: 404
+BAI-7,S-1.2 — System administrator should be able to assign user roles,0.0,Gemini API error: 404
+BAI-6,S-1.1 — Admin user should be able to log in via SSO,0.0,Gemini API error: 404
+BAI-5,EP-4 — Integration & API,,Epic — not scored individually.
+BAI-4,EP-3 — Reporting & Analysis,,Epic — not scored individually.
+BAI-3,EP-2 — Product Catalog / Inventory,,Epic — not scored individually.
+BAI-2,EP-1 — User Management,,Epic — not scored individually.
