@@ -10,8 +10,8 @@ from agents.capacity_agent import capacity_analysis
 from agents.recommendation_agent import ai_recommendation
 from agents.requirement_agent import requirement_analysis
 from agents.task_validation_agent import validate_task
-from agents.jira_support_agent import jira_support_answer
 from agents.brd_alignment_agent import run_brd_alignment, run_gap_detection, print_gap_report
+from agents.jira_support_agent import JiraSupportAgent
 from context.context_builder import build_context
 from reports.pdf_report import create_pdf_report
 
@@ -221,6 +221,30 @@ def fetch_and_analyze():
         )
         add_jira_comment(row["key"], comment)
 
+    return df
+
 
 if __name__ == "__main__":
-    fetch_and_analyze()
+    df = fetch_and_analyze()
+
+    print("\n" + "═" * 55)
+    print("  🤖  Jira Support Agent — ask anything about the sprint")
+    print("  Type 'quit' to exit | 'reset' to clear history")
+    print("═" * 55 + "\n")
+
+    agent = JiraSupportAgent(df)
+    while True:
+        try:
+            question = input("You: ").strip()
+        except (KeyboardInterrupt, EOFError):
+            print("\nGoodbye! 👋")
+            break
+        if not question:
+            continue
+        if question.lower() in ("quit", "exit", "q"):
+            print("Goodbye! 👋")
+            break
+        if question.lower() == "reset":
+            agent.reset()
+            continue
+        print(f"\nAgent: {agent.ask(question)}\n")

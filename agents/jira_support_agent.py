@@ -1,176 +1,228 @@
-import os
+"""
+jira_support_agent.py
+---------------------
+AI-powered Jira support chatbot using OpenAI GPT-4o-mini.
 
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+Replaces the old keyword-matching system with a real conversational agent.
+The agent reads jira_guide.txt as its knowledge base and can also answer
+questions about the live Jira project data (sprint health, tasks, capacity).
+
+When MCP is integrated later, replace the df context section with
+live MCP tool calls — the OpenAI connection stays exactly the same.
+
+Usage (standalone):
+    python agents/jira_support_agent.py
+
+Usage (from main.py):
+    from agents.jira_support_agent import JiraSupportAgent
+    agent = JiraSupportAgent(df)
+    answer = agent.ask("Which tasks are delayed this sprint?")
+"""
+
+import os
+import json
+from openai import OpenAI
+from dotenv import load_dotenv
+
+load_dotenv()
+
+BASE_DIR   = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GUIDE_PATH = os.path.join(BASE_DIR, "jira_guide.txt")
 
 
-def load_guide():
-    with open(GUIDE_PATH, "r", encoding="utf-8") as f:
+# ══════════════════════════════════════════════════════════════════════════
+# 1. LOAD KNOWLEDGE BASE
+# ══════════════════════════════════════════════════════════════════════════
+
+def load_guide(path: str = GUIDE_PATH) -> str:
+    """Reads jira_guide.txt and returns its content."""
+    if not os.path.exists(path):
+        return "Jira guide not found. Answering from general knowledge only."
+    with open(path, "r", encoding="utf-8") as f:
         return f.read().strip()
 
 
-GUIDE_TEXT = load_guide()
+# ══════════════════════════════════════════════════════════════════════════
+# 2. BUILD PROJECT CONTEXT FROM DATAFRAME
+# ══════════════════════════════════════════════════════════════════════════
+
+def build_project_context(df) -> str:
+    """
+    Converts the Jira DataFrame into a compact text summary for the AI.
+    When MCP is ready, this will be replaced by live MCP tool calls.
+    """
+    if df is None or df.empty:
+        return "No project data available."
+
+    total       = len(df)
+    done        = len(df[df["status"].isin(["Tamam", "Done", "Tamamlandı"])])
+    in_progress = len(df[df["status"].isin(["Devam Ediyor", "In Progress"])])
+    todo        = len(df[df["status"].isin(["Yapılacaklar", "To Do"])])
+    delayed     = len(df[df.get("delay", False) == True]) if "delay" in df.columns else 0
+    high_risk   = len(df[df["risk_score"] >= 2.5]) if "risk_score" in df.columns else 0
+    total_sp    = int(df["story_points"].sum()) if "story_points" in df.columns else 0
+
+    # Sprint breakdown
+    sprint_info = ""
+    if "sprint_name" in df.columns:
+        for sprint, group in df.groupby("sprint_name"):
+            if not sprint:
+                continue
+            sp = int(group["story_points"].sum()) if "story_points" in group.columns else 0
+            sprint_info += f"\n  - {sprint}: {len(group)} tasks, {sp} story points"
+
+    # High risk tasks
+    risk_lines = ""
+    if "risk_score" in df.columns:
+        risky = df[df["risk_score"] >= 2.5][["key", "summary", "risk_score", "assignee"]].head(5)
+        for _, r in risky.iterrows():
+            risk_lines += f"\n  - {r['key']}: {r['summary'][:50]} (risk: {r['risk_score']}, assignee: {r['assignee']})"
+
+    # Delayed tasks
+    delay_lines = ""
+    if "delay" in df.columns:
+        delayed_tasks = df[df["delay"] == True][["key", "summary", "assignee"]].head(5)
+        for _, r in delayed_tasks.iterrows():
+            delay_lines += f"\n  - {r['key']}: {r['summary'][:50]} (assignee: {r['assignee']})"
+
+    # Assignee workload
+    workload = ""
+    if "assignee" in df.columns and "story_points" in df.columns:
+        for assignee, group in df.groupby("assignee"):
+            sp = int(group["story_points"].sum())
+            workload += f"\n  - {assignee}: {len(group)} tasks, {sp} SP"
+
+    context = f"""
+=== LIVE PROJECT DATA (BAI Project) ===
+
+Overview:
+  Total tasks     : {total}
+  Done            : {done}
+  In Progress     : {in_progress}
+  To Do           : {todo}
+  Delayed         : {delayed}
+  High Risk       : {high_risk}
+  Total Story Pts : {total_sp}
+
+Sprints:{sprint_info if sprint_info else " No sprint data."}
+
+High Risk Tasks:{risk_lines if risk_lines else " None."}
+
+Delayed Tasks:{delay_lines if delay_lines else " None."}
+
+Team Workload:{workload if workload else " No workload data."}
+"""
+    return context.strip()
 
 
-def parse_guide_sections(text):
-    sections = {}
-    current_title = None
-    buffer = []
+# ══════════════════════════════════════════════════════════════════════════
+# 3. AGENT CLASS
+# ══════════════════════════════════════════════════════════════════════════
 
-    for line in text.splitlines():
-        stripped = line.strip()
+class JiraSupportAgent:
+    """
+    Conversational Jira support agent powered by OpenAI GPT-4o-mini.
 
-        if not stripped:
+    Remembers conversation history within a session (multi-turn).
+    Answers both general Jira questions (from the guide) and
+    project-specific questions (from live Jira data).
+    """
+
+    def __init__(self, df=None):
+        api_key = os.getenv("OPENAI_API_KEY")
+        if not api_key:
+            raise EnvironmentError(
+                "OPENAI_API_KEY not found in environment. "
+                "Add it to your .env file."
+            )
+
+        self.client          = OpenAI(api_key=api_key)
+        self.guide_text      = load_guide()
+        self.project_context = build_project_context(df)
+        self.history         = []  # conversation history for multi-turn
+
+        # System prompt — stays in every request
+        self.system_prompt = f"""You are an AI-powered Jira Support Agent for the BAI project at Beko.
+You have two knowledge sources:
+
+1. JIRA GUIDE — General Jira knowledge (how-to, definitions, best practices):
+{self.guide_text[:3000]}
+
+2. LIVE PROJECT DATA — Current state of the BAI Jira project:
+{self.project_context}
+
+Your rules:
+- Answer clearly and concisely in English.
+- For general Jira questions (what is an Epic, how to create a task, etc.), use the Jira Guide.
+- For project-specific questions (delayed tasks, team workload, sprint status, risk), use the Live Project Data.
+- If you don't know something, say so honestly — never make up task names or numbers.
+- When listing tasks, include the task key (e.g. BAI-21) and a brief summary.
+- Keep answers focused: 3-5 sentences for simple questions, bullet points for lists.
+- When MCP is integrated, you will receive even richer real-time data — for now use what's provided."""
+
+    def ask(self, question: str) -> str:
+        """
+        Sends a question to the agent and returns the answer.
+        Conversation history is preserved for follow-up questions.
+        """
+        self.history.append({"role": "user", "content": question})
+
+        try:
+            response = self.client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": self.system_prompt},
+                    *self.history
+                ],
+                max_tokens=500,
+                temperature=0.3
+            )
+            answer = response.choices[0].message.content.strip()
+
+        except Exception as e:
+            answer = f"OpenAI API error: {e}"
+
+        self.history.append({"role": "assistant", "content": answer})
+        return answer
+
+    def reset(self):
+        """Clears conversation history to start a fresh session."""
+        self.history = []
+        print("🔄  Conversation history cleared.")
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# 4. STANDALONE CHAT MODE
+# ══════════════════════════════════════════════════════════════════════════
+
+if __name__ == "__main__":
+    import pandas as pd
+
+    # Try to load project data if CSV exists
+    csv_path = os.path.join(BASE_DIR, "jira_live_dataset.csv")
+    df = pd.read_csv(csv_path) if os.path.exists(csv_path) else None
+
+    agent = JiraSupportAgent(df)
+
+    print("\n" + "═" * 55)
+    print("  🤖  Jira Support Agent — powered by GPT-4o-mini")
+    print("  Type 'quit' to exit | 'reset' to clear history")
+    print("═" * 55 + "\n")
+
+    while True:
+        try:
+            question = input("You: ").strip()
+        except (KeyboardInterrupt, EOFError):
+            print("\nGoodbye! 👋")
+            break
+
+        if not question:
+            continue
+        if question.lower() in ("quit", "exit", "q"):
+            print("Goodbye! 👋")
+            break
+        if question.lower() == "reset":
+            agent.reset()
             continue
 
-        if stripped.endswith(":") and len(stripped) < 120:
-            if current_title is not None:
-                sections[current_title] = " ".join(buffer).strip()
-
-            current_title = stripped[:-1].strip().lower()
-            buffer = []
-        else:
-            if current_title is not None:
-                buffer.append(stripped)
-
-    if current_title is not None:
-        sections[current_title] = " ".join(buffer).strip()
-
-    return sections
-
-
-GUIDE_SECTIONS = parse_guide_sections(GUIDE_TEXT)
-
-
-def get_guide_value(*possible_keys):
-    for key in possible_keys:
-        value = GUIDE_SECTIONS.get(key.lower())
-        if value:
-            return value
-    return None
-
-
-TOPIC_KEYWORDS = {
-    "jira": ["jira", "tool", "platform", "software"],
-    "epic": ["epic", "large body", "parent issue", "group"],
-    "story": ["story", "user requirement", "user perspective"],
-    "task": ["task", "technical work", "sub-task"],
-    "sprint": ["sprint", "iteration", "time-boxed"],
-    "backlog": ["backlog", "list of work", "queue"],
-    "assignee": ["assignee", "responsible", "who"],
-    "priority": ["priority", "urgent", "important"],
-    "story point": ["story point", "effort", "estimate", "points"],
-    "share_plan": ["share", "stakeholder", "export", "communicate", "link"],
-    "scenarios": ["scenario", "alternative", "sandbox", "worst case", "best case"],
-    "track_progress": ["track", "report", "progress", "summary screen", "snapshot"],
-}
-
-
-def normalize_text(text):
-    return text.lower().strip()
-
-
-def detect_topic(question):
-    q = normalize_text(question)
-    scores = {}
-
-    for topic, keywords in TOPIC_KEYWORDS.items():
-        score = 0
-        for kw in keywords:
-            if kw in q:
-                score += 2 if " " in kw else 1
-        if score > 0:
-            scores[topic] = score
-
-    if not scores:
-        return None
-
-    priority_order = [
-        "share_plan", "scenarios", "track_progress", "who_uses_jira",
-        "assignee", "priority", "story point",
-        "epic", "story", "task", "sprint", "backlog", "jira"
-    ]
-
-    max_score = max(scores.values())
-    candidates = [topic for topic, score in scores.items() if score == max_score]
-
-    for topic in priority_order:
-        if topic in candidates:
-            return topic
-
-    return candidates[0]
-
-
-def jira_support_answer(question):
-    q = normalize_text(question)
-    topic = detect_topic(question)
-
-    # Özel Soru: Story vs Task farkı
-    if "difference" in q and "story" in q and "task" in q:
-        story_text = get_guide_value("story") or "Story section not found."
-        task_text = get_guide_value("task") or "Task section not found."
-        return (
-            "🤖 AI Answer: A story represents a user requirement, while a task is the technical work needed to complete it.\n\n"
-            f"📖 Guide (STORY): {story_text}\n\n"
-            f"📖 Guide (TASK): {task_text}"
-        )
-
-    # Özel Soru: Task nasıl açılır
-    if "how" in q and ("create" in q or "open" in q or "add" in q) and "task" in q:
-        return (
-            "🤖 AI Answer: When creating a task, you must provide a summary, description, priority, assignee, and link it to an Epic.\n\n"
-            f"📖 Guide: {get_guide_value('task') or 'Task section not found.'}"
-        )
-
-    # Özel Soru: Task neden hatalı
-    if ("why" in q or "what" in q) and ("invalid" in q or "wrong" in q or "error" in q):
-        return (
-            "🤖 AI Answer: A task is considered invalid if it lacks a description, assignee, epic link, or if the summary is too short.\n"
-            "Our Validation Agent checks these fields automatically to maintain PMO standards."
-        )
-        
-        
-    if topic == "share_plan":
-        return f"🤖 AI Answer: Plans are made to be shared easily!\n📖 Guide: {get_guide_value('how do i share a plan with stakeholders?')}"
-
-    if topic == "scenarios":
-        return f"🤖 AI Answer: You can use a sandbox environment to test different outcomes.\n📖 Guide: {get_guide_value('how do i plan for different scenarios?')}"
-
-    if topic == "track_progress":
-        return f"🤖 AI Answer: Tracking is essential. Check the summary screen.\n📖 Guide: {get_guide_value('how do i track and report progress of a plan?')}"
-
-    if topic == "who_uses_jira":
-        return f"🤖 AI Answer: Jira is for everyone, not just developers!\n📖 Guide: {get_guide_value('who uses jira?')}"
-    if topic == "jira":
-        return f"🤖 AI Answer: Jira is our main tracking tool.\n📖 Guide: {get_guide_value('what is jira?', 'jira')}"
-
-    if topic == "epic":
-        return f"🤖 AI Answer: Epics are used to group large bodies of work.\n📖 Guide: {get_guide_value('epic')}"
-
-    if topic == "story":
-        return f"🤖 AI Answer:\n📖 Guide: {get_guide_value('story')}"
-
-    if topic == "task":
-        return f"🤖 AI Answer:\n📖 Guide: {get_guide_value('task')}"
-
-    if topic == "sprint":
-        return f"🤖 AI Answer: We use sprints to complete planned work.\n📖 Guide: {get_guide_value('sprint')}"
-
-    if topic == "backlog":
-        return f"🤖 AI Answer:\n📖 Guide: {get_guide_value('backlog')}"
-
-    if topic == "assignee":
-        return f"🤖 AI Answer: Every task must have an owner.\n📖 Guide: {get_guide_value('assignee')}"
-
-    if topic == "priority":
-        return f"🤖 AI Answer: Prioritize tasks to manage workflow effectively.\n📖 Guide: {get_guide_value('priority')}"
-
-    if topic == "story point":
-        return f"🤖 AI Answer:\n📖 Guide: {get_guide_value('story point')}"
-
-    return (
-        "🤖 AI Answer: I understood the question but couldn't find an exact match in the guide. "
-        "You can ask me about Epic, Story, Task, Sprint, Backlog, Assignee, or Priority."
-    )
-
-
+        print(f"\nAgent: {agent.ask(question)}\n")
