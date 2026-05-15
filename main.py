@@ -11,7 +11,7 @@ from agents.recommendation_agent import ai_recommendation
 from agents.requirement_agent import requirement_analysis
 from agents.task_validation_agent import validate_task
 from agents.jira_support_agent import jira_support_answer
-from agents.brd_alignment_agent import run_brd_alignment
+from agents.brd_alignment_agent import run_brd_alignment, run_gap_detection, print_gap_report
 from context.context_builder import build_context
 from reports.pdf_report import create_pdf_report
 
@@ -90,11 +90,11 @@ def fetch_and_analyze():
 
         expertise_data = fields.get("customfield_10139")
         if isinstance(expertise_data, dict):
-            expertise = expertise_data.get("value", "Belirtilmemiş")
+            expertise = expertise_data.get("value", "Unspecified")
         elif expertise_data:
             expertise = str(expertise_data)
         else:
-            expertise = "Belirtilmemiş"
+            expertise = "Unspecified"
 
         estimated_seconds = fields.get("timeoriginalestimate")
         spent_seconds     = fields.get("timespent")
@@ -144,15 +144,18 @@ def fetch_and_analyze():
     df = ai_recommendation(df)
     df = requirement_analysis(df)
     df = validate_task(df)
-    df = run_brd_alignment(df)          # ← BRD Alignment Agent
+    df = run_brd_alignment(df, brd_path="brd_document.md")
+
+    gaps = run_gap_detection(df, brd_path="brd_document.md")
+    print_gap_report(gaps)
 
     team_capacity, total_effort, bottleneck_report = capacity_analysis(df)
     average_risk = df["risk_score"].mean()
 
     # ── Raporlar ─────────────────────────────────────────────────────────────
     print("\nCAPACITY REPORT\n")
-    print(f"Genel Takım Kapasitesi : {team_capacity} Saat")
-    print(f"Toplam İş Yükü         : {total_effort} Saat")
+    print(f"Total Team Capacity : {team_capacity} Hours")
+    print(f"Total Workload      : {total_effort} Hours")
     print("-" * 40)
     for report in bottleneck_report:
         print(report)
@@ -162,9 +165,9 @@ def fetch_and_analyze():
     print("\nBRD ALIGNMENT SUMMARY\n")
     valid_scores = df["brd_score"].dropna()
     if not valid_scores.empty:
-        print(f"Ortalama BRD Skoru : {valid_scores.mean():.1f}/10")
-        print(f"Düşük Uyum (<5)    : {(valid_scores < 5).sum()} task")
-        print(f"Yüksek Uyum (>=7)  : {(valid_scores >= 7).sum()} task")
+        print(f"Average BRD Score  : {valid_scores.mean():.1f}/10")
+        print(f"Low Alignment (<5) : {(valid_scores < 5).sum()} tasks")
+        print(f"High Alignment(>=7): {(valid_scores >= 7).sum()} tasks")
 
     print("\nSPRINT HEALTH REPORT\n")
     context = build_context(df)
