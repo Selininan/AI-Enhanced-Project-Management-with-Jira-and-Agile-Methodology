@@ -101,6 +101,7 @@ def fetch_jira_data(project_key: str) -> pd.DataFrame:
         )
         sprint_field  = fields.get("customfield_10020") or []
         sprint_name   = sprint_field[-1].get("name", "") if isinstance(sprint_field, list) and sprint_field else ""
+        sprint_state  = sprint_field[-1].get("state", "").lower() if isinstance(sprint_field, list) and sprint_field else ""
         est_sec       = fields.get("timeoriginalestimate")
         spent_sec     = fields.get("timespent")
         story_points  = fields.get("customfield_10016") or 0
@@ -118,6 +119,7 @@ def fetch_jira_data(project_key: str) -> pd.DataFrame:
             "assignee":        assignee,
             "expertise":       expertise,
             "sprint_name":     sprint_name,
+            "sprint_state":    sprint_state,
             "created":         (fields.get("created") or "")[:10],
             "updated":         (fields.get("updated") or "")[:10],
             "epic":            (parent_data or {}).get("key", ""),

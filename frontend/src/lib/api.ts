@@ -62,13 +62,14 @@ export async function listProjects(): Promise<JiraProject[]> {
 // ── Tipler ──────────────────────────────────────────────────────────────────
 
 export interface Task {
-  key:          string;
-  summary:      string;
-  status:       string;
-  assignee:     string;
-  risk_score:   number;
-  sprint_name:  string;
-  brd_score?:   number;
+  key:           string;
+  summary:       string;
+  status:        string;
+  assignee:      string;
+  risk_score:    number;
+  sprint_name:   string;
+  sprint_state?: string;
+  brd_score?:    number;
   brd_reasoning?: string;
 }
 
