@@ -509,6 +509,92 @@ Respond with ONLY one option from the list."""
     except Exception as e:
         return json.dumps({"error": str(e)})
 
+# ── Tool 9: Requirement Analysis ─────────────────────────────────────────────
+
+@mcp.tool(name="jira_check_requirement", annotations={"readOnlyHint": False, "destructiveHint": False})
+async def jira_check_requirement(
+    issue_key: str,
+    summary: str,
+    description: str = ""
+) -> str:
+    """
+    Analyzes a Jira task description for PMI standard compliance.
+    Checks for Actor and Acceptance Criteria keywords.
+    Posts the result as a Jira comment.
+
+    Args:
+        issue_key: Jira key e.g. 'BAI-42'
+        summary: Issue title
+        description: Issue description text
+    """
+    try:
+        desc = description.lower().strip()
+
+        actor_keywords    = ["actor", "aktör", "user", "kullanıcı", "müşteri", "admin", "client"]
+        criteria_keywords = ["acceptance criteria", "kabul kriteri", "kabul kriterleri",
+                             "expected result", "beklenen", "test steps"]
+
+        if not desc or desc == "none":
+            result  = "🚨 Critical Missing"
+            detail  = "Task description is completely empty. Please add Actor and Acceptance Criteria."
+            emoji   = "🔴"
+            has_actor    = False
+            has_criteria = False
+        else:
+            has_actor    = any(k in desc for k in actor_keywords)
+            has_criteria = any(k in desc for k in criteria_keywords)
+
+            if has_actor and has_criteria:
+                result  = "✅ PMI Compliant"
+                detail  = "Both Actor and Acceptance Criteria are present. Good quality task."
+                emoji   = "🟢"
+            elif has_actor and not has_criteria:
+                result  = "⚠️ Missing Acceptance Criteria"
+                detail  = "Actor is defined but Acceptance Criteria is missing. When is this task done?"
+                emoji   = "🟡"
+            elif not has_actor and has_criteria:
+                result  = "⚠️ Missing Actor"
+                detail  = "Acceptance Criteria exists but Actor is missing. Who will use this?"
+                emoji   = "🟡"
+            else:
+                result  = "🔴 Weak Requirement"
+                detail  = "Description exists but neither Actor nor Acceptance Criteria found. Please rewrite."
+                emoji   = "🔴"
+
+        comment_text = (
+            f"📋 Requirement Quality Analysis\n\n"
+            f"{emoji} Result: {result}\n\n"
+            f"Details: {detail}\n\n"
+            f"PMI Standard requires:\n"
+            f"  • Actor — who will use this feature?\n"
+            f"  • Acceptance Criteria — when is it done?\n\n"
+            f"Analyzed by AI Requirement Agent."
+        )
+
+        url = f"https://{JIRA_DOMAIN}/rest/api/3/issue/{issue_key}/comment"
+        payload = {
+            "body": {
+                "type": "doc", "version": 1,
+                "content": [{"type": "paragraph", "content": [{"type": "text", "text": comment_text}]}]
+            }
+        }
+        resp = requests.post(
+            url, headers=HEADERS,
+            auth=HTTPBasicAuth(JIRA_EMAIL, JIRA_API_TOKEN), json=payload
+        )
+
+        return json.dumps({
+            "issue_key":      issue_key,
+            "result":         result,
+            "has_actor":      has_actor,
+            "has_criteria":   has_criteria,
+            "comment_posted": resp.status_code == 201,
+        }, indent=2)
+
+    except Exception as e:
+        return json.dumps({"error": str(e)})
+
+
 # ── Entry Point ───────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":

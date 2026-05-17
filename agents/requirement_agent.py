@@ -8,28 +8,25 @@ def requirement_analysis(df):
 
         # Eğer açıklama tamamen boşsa baştan uyarıyı ver
         if not description or description == "none":
-            return "Kritik Eksik → Görev açıklaması (Description) tamamen boş!"
+            return "Critical Missing → Task description is completely empty!"
 
-        # PMI Standartlarına göre aranacak anahtar kelimeler (Türkçe ve İngilizce)
         actor_keywords = ["actor", "aktör", "user", "kullanıcı", "müşteri", "admin", "client"]
         criteria_keywords = ["acceptance criteria", "kabul kriteri", "kabul kriterleri", "expected result", "beklenen", "test steps"]
 
-        # Metnin içinde bu kelimeler geçiyor mu diye kontrol ediyoruz
         has_actor = any(k in description for k in actor_keywords)
         has_criteria = any(k in description for k in criteria_keywords)
 
-        # Duruma göre AI'ın vereceği PMO tepkileri:
         if has_actor and has_criteria:
-            return "PMI Standardına Uygun → Aktör ve Kabul Kriterleri mevcut. (Kaliteli Analiz)"
-        
+            return "PMI Compliant → Actor and Acceptance Criteria are present. (Quality Analysis)"
+
         elif has_actor and not has_criteria:
-            return "Eksik Analiz → Aktör belirtilmiş ama 'Kabul Kriteri' (Acceptance Criteria) eksik. İşin ne zaman biteceği belirsiz."
-        
+            return "Incomplete → Actor is specified but Acceptance Criteria is missing. Definition of done is unclear."
+
         elif not has_actor and has_criteria:
-            return "Eksik Analiz → Kabul kriteri var ama işin 'Aktörü' (Kim kullanacak?) belirtilmemiş. Hedef kitle netleşmeli."
-        
+            return "Incomplete → Acceptance criteria exists but Actor (who will use it?) is not specified."
+
         else:
-            return "Zayıf Gereksinim → Açıklama var ancak Aktör ve Kabul Kriteri yok. Kapsam (Scope) çok belirsiz, yeniden yazılmalı."
+            return "Weak Requirement → Description exists but Actor and Acceptance Criteria are missing. Scope is very vague, needs rewriting."
 
     # Fonksiyonu DataFrame'in tüm satırlarına uygula
     df["requirement_alignment"] = df.apply(check_requirement, axis=1)
