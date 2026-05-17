@@ -91,7 +91,7 @@ export interface CapacityReport {
   utilization:       number;
   is_overloaded:     boolean;
   bottleneck_report: { level: "ok" | "warning" | "critical"; message: string }[];
-  workload:          { assignee: string; story_points: number }[];
+  workload:          { assignee: string; story_points: number; unit?: string }[];
 }
 
 // Karşılaştırma özeti tipi (YENİ)

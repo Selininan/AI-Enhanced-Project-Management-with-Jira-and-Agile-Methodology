@@ -72,7 +72,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "BAI — Beko AI Sprint Management" },
+      { title: "AI Analysis — Jira AI Dashboard" },
       { name: "description", content: "AI-Enhanced Project Management Dashboard for Jira & Agile, built for Beko." },
     ],
     links: [{ rel: "stylesheet", href: appCss }],

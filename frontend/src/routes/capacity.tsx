@@ -130,7 +130,7 @@ function CapacityPage() {
                 <div className="flex justify-between text-sm mb-1.5">
                   <span className="font-medium">{w.assignee}</span>
                   <span className="text-muted-foreground tabular-nums">
-                    {w.story_points} pts
+                    {w.story_points} {w.unit ?? "pts"}
                   </span>
                 </div>
                 <div className="h-2 rounded-full bg-muted overflow-hidden">

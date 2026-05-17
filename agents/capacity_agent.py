@@ -22,9 +22,8 @@ def capacity_analysis(df):
 
         # Rollerin toplam kapasitesini hesapla (Kişi Sayısı * 80 Saat)
         for role, count in role_counts.items():
-            if role != "Unspecified":
-                dynamic_role_capacities[role] = count * sprint_hours_per_person
-                team_capacity += (count * sprint_hours_per_person)
+            dynamic_role_capacities[role] = count * sprint_hours_per_person
+            team_capacity += (count * sprint_hours_per_person)
 
     # 2. UZMANLIK ALANINA GÖRE İŞ YÜKÜ (EFOR) GRUPLAMA
     role_efforts = df.groupby("expertise")["effort_hours"].sum().to_dict()

@@ -250,12 +250,14 @@ def analyze_capacity(
         level = "critical" if "🚨" in msg else "warning" if "⚠️" in msg else "ok"
         bottleneck_report.append({"level": level, "message": msg})
 
+    use_hours = df["story_points"].sum() == 0
     workload = []
-    if "assignee" in df.columns and "story_points" in df.columns:
+    if "assignee" in df.columns:
         for assignee, group in df[df["assignee"] != "Unassigned"].groupby("assignee"):
             workload.append({
                 "assignee":     assignee,
-                "story_points": int(group["story_points"].sum()),
+                "story_points": round(float(group["estimated_hours"].sum()), 1) if use_hours else int(group["story_points"].sum()),
+                "unit":         "h" if use_hours else "pts",
             })
 
     return {

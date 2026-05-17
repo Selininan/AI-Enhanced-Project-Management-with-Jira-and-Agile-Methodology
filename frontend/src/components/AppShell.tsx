@@ -68,9 +68,9 @@ export function AppShell() {
               B
             </div>
             <div>
-              <div className="text-sm font-semibold leading-tight">BAI</div>
+              <div className="text-sm font-semibold leading-tight">AI Analysis</div>
               <div className="text-[11px] text-muted-foreground leading-tight">
-                Beko AI Sprint
+                Jira AI Dashboard
               </div>
             </div>
           </div>
@@ -153,7 +153,7 @@ export function AppShell() {
         <header className="h-14 border-b border-border bg-background flex items-center justify-between px-4 md:px-6">
           <div className="flex items-center gap-3 min-w-0">
             <h1 className="text-sm md:text-base font-semibold truncate">
-              BAI — {projectName}
+              AI Analysis — {projectName}
             </h1>
             <div className="hidden sm:flex items-center gap-1.5 text-xs text-muted-foreground">
               <span
