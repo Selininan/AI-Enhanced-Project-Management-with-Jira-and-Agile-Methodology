@@ -206,21 +206,6 @@ def fetch_and_analyze():
 
     create_pdf_report(df, total_effort, team_capacity)
 
-    # ── Jira Comments ────────────────────────────────────────────────────────
-    print("\nWRITING COMMENTS TO JIRA\n")
-    problem_tasks = df[(df["validation_result"] != "Valid") | (df["risk_score"] >= 3)]
-    for _, row in problem_tasks.iterrows():
-        brd = row.get("brd_score", "N/A")
-        comment = (
-            f"🤖 AI Sprint Analysis\n\n"
-            f"• Risk Score: {row['risk_score']}\n"
-            f"• BRD Alignment: {brd}/10\n"
-            f"• Status: {row['status']}\n\n"
-            f"⚠️ Issues:\n{row['validation_result']}\n\n"
-            f"💡 Recommendation:\n{row['recommendation']}"
-        )
-        add_jira_comment(row["key"], comment)
-
     return df
 
 
