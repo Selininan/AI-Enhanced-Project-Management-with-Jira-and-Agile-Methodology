@@ -4,6 +4,7 @@ import {
   analyzeSprint,
   SprintAnalysis,
 } from "@/lib/api";
+import { useProject } from "@/context/ProjectContext";
 import {
   MetricCard,
   PageHeader,
@@ -34,6 +35,7 @@ export const Route = createFileRoute("/sprint-analysis")({
 });
 
 function SprintAnalysisPage() {
+  const { selectedProject } = useProject();
   const [data, setData] = useState<SprintAnalysis | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -41,21 +43,23 @@ function SprintAnalysisPage() {
   const [status, setStatus] = useState("all");
 
   useEffect(() => {
+    setData(null);
+    let cancelled = false;
     const load = async () => {
       setLoading(true);
       setError("");
       try {
-        setData(await analyzeSprint());
+        const d = await analyzeSprint(selectedProject);
+        if (!cancelled) setData(d);
       } catch {
-        setError("Backend'e bağlanılamadı. FastAPI server çalışıyor mu?");
+        if (!cancelled) setError("Could not connect to backend. Is FastAPI running?");
+      } finally {
+        if (!cancelled) setLoading(false);
       }
-      setLoading(false);
     };
     load();
-    const h = () => load();
-    window.addEventListener("bai:refresh", h);
-    return () => window.removeEventListener("bai:refresh", h);
-  }, []);
+    return () => { cancelled = true; };
+  }, [selectedProject]);
 
   const tasks = data?.tasks ?? [];
 

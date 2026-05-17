@@ -4,6 +4,7 @@ import {
   analyzeCapacity,
   CapacityReport,
 } from "@/lib/api";
+import { useProject } from "@/context/ProjectContext";
 import {
   CircularProgress,
   MetricCard,
@@ -17,26 +18,29 @@ export const Route = createFileRoute("/capacity")({
 });
 
 function CapacityPage() {
+  const { selectedProject } = useProject();
   const [data, setData] = useState<CapacityReport | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
+    setData(null);
+    let cancelled = false;
     const load = async () => {
       setLoading(true);
       setError("");
       try {
-        setData(await analyzeCapacity());
+        const d = await analyzeCapacity(selectedProject);
+        if (!cancelled) setData(d);
       } catch {
-        setError("Backend'e bağlanılamadı. FastAPI server çalışıyor mu?");
+        if (!cancelled) setError("Could not connect to backend. Is FastAPI running?");
+      } finally {
+        if (!cancelled) setLoading(false);
       }
-      setLoading(false);
     };
     load();
-    const h = () => load();
-    window.addEventListener("bai:refresh", h);
-    return () => window.removeEventListener("bai:refresh", h);
-  }, []);
+    return () => { cancelled = true; };
+  }, [selectedProject]);
 
   const maxPts = Math.max(...(data?.workload ?? []).map((w: CapacityReport["workload"][0]) => w.story_points), 1);
 

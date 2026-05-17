@@ -17,7 +17,7 @@ const ProjectContext = createContext<ProjectContextType>({
 
 export function ProjectProvider({ children }: { children: ReactNode }) {
   const [selectedProject, setSelectedProject] = useState<string>(
-    () => localStorage.getItem("bai_selected_project") || "BAI"
+    () => (typeof window !== "undefined" ? localStorage.getItem("bai_selected_project") || "BAI" : "BAI")
   );
   const [projects, setProjects] = useState<JiraProject[]>([
     { key: "BAI", name: "Beko AI Sprint Management" },

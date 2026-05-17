@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { analyzeBrd, Task } from "@/lib/api";
+import { useProject } from "@/context/ProjectContext";
 import { MetricCard, PageHeader, Skeleton } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { Search, Star, Loader2 } from "lucide-react";
@@ -50,25 +51,32 @@ function StarRating({ score }: { score: number }) {
 }
 
 function BrdPage() {
+  const { selectedProject } = useProject();
   const [tasks, setTasks] = useState<Task[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [gapRunning, setGapRunning] = useState(false);
   const [gapResult, setGapResult] = useState<string[] | null>(null);
 
   useEffect(() => {
+    setTasks(null);
+    let cancelled = false;
     const load = async () => {
       setLoading(true);
-      const d = await analyzeBrd();
-      setTasks(d.tasks);
-      setLoading(false);
+      try {
+        const d = await analyzeBrd(selectedProject);
+        if (!cancelled) setTasks(d.tasks);
+      } catch {
+        if (!cancelled) setTasks([]);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
     };
     load();
-    const h = () => load();
-    window.addEventListener("bai:refresh", h);
-    return () => window.removeEventListener("bai:refresh", h);
-  }, []);
+    return () => { cancelled = true; };
+  }, [selectedProject]);
 
   const t: Task[] = tasks ?? [];
+  const noData = !loading && tasks !== null && t.length === 0;
   const scored = t.filter((x: Task) => typeof x.brd_score === "number");
   const avg =
     scored.length === 0
@@ -107,6 +115,11 @@ function BrdPage() {
       <h3 className="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wide">
         BRD Scoring Summary
       </h3>
+      {noData && (
+        <div className="rounded-lg border border-border bg-card p-8 text-center text-sm text-muted-foreground mb-8">
+          No BRD report found for <span className="font-semibold text-foreground">{selectedProject}</span>.
+        </div>
+      )}
       <div className="max-h-[600px] overflow-y-auto rounded-lg">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
         {scored.map((task: Task) => {

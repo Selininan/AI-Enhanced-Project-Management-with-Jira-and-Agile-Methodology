@@ -1,4 +1,5 @@
 import os
+import sys
 import requests
 from requests.auth import HTTPBasicAuth
 import pandas as pd
@@ -20,7 +21,7 @@ load_dotenv()
 email       = os.getenv("JIRA_EMAIL")
 api_token   = os.getenv("JIRA_API_TOKEN")
 domain      = os.getenv("JIRA_DOMAIN")
-project_key = os.getenv("JIRA_PROJECT_KEY", "BAI")
+project_key = sys.argv[1] if len(sys.argv) > 1 else os.getenv("JIRA_PROJECT_KEY", "BAI")
 url         = f"https://{domain}/rest/api/3/search/jql"
 
 headers = {
@@ -191,10 +192,11 @@ def fetch_and_analyze():
         print("Recommendation: Reduce sprint workload")
 
     # ── Çıktılar ─────────────────────────────────────────────────────────────
+    brd_csv = f"brd_report_{project_key}.csv"
     df.to_csv("jira_dataset.csv", index=False)
     df[["key", "summary", "validation_result"]].to_csv("validation_report.csv", index=False)
-    df[["key", "summary", "brd_score", "brd_reasoning"]].to_csv("brd_report.csv", index=False)
-    print("brd_report.csv saved")
+    df[["key", "summary", "brd_score", "brd_reasoning"]].to_csv(brd_csv, index=False)
+    print(f"{brd_csv} saved")
 
     plt.figure(figsize=(10, 5))
     df.set_index("key")["risk_score"].plot(kind="bar", color="skyblue")

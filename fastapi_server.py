@@ -186,7 +186,12 @@ def analyze_sprint(
     """
     df = fetch_jira_data(project_key)
     if df.empty:
-        raise HTTPException(status_code=404, detail=f"No issues found in project '{project_key}'")
+        return {
+            "project_key": project_key, "sprint_status": "LOW RISK",
+            "average_risk": 0, "total_tasks": 0, "completed_tasks": 0,
+            "delayed_tasks": 0, "high_risk_tasks": 0, "load_percentage": 0,
+            "recommendations": [f"No tasks found in project '{project_key}'."], "tasks": [],
+        }
     df            = run_all_agents(df)
     context       = build_context(df)
     average_risk  = float(df["risk_score"].mean())
@@ -232,7 +237,10 @@ def analyze_capacity(
     """
     df = fetch_jira_data(project_key)
     if df.empty:
-        raise HTTPException(status_code=404, detail=f"No issues found in project '{project_key}'")
+        return {
+            "project_key": project_key, "team_capacity": 0, "total_effort": 0,
+            "utilization": 0, "is_overloaded": False, "bottleneck_report": [], "workload": [],
+        }
     df = run_all_agents(df)
     team_capacity, total_effort, bottleneck_raw = capacity_analysis(df)
     utilization = round(total_effort / team_capacity * 100, 1) if team_capacity else 0
@@ -287,10 +295,8 @@ def get_brd_report(
     Onceden uretilmis brd_report.csv okur.
     Her proje icin ayri CSV: brd_report_DT.csv, brd_report_BAI.csv
     """
-    csv_name = f"brd_report_{project_key}.csv" if project_key != DEFAULT_PROJECT else "brd_report.csv"
+    csv_name = f"brd_report_{project_key}.csv"
     csv_path = os.path.join(BASE_DIR, csv_name)
-    if not os.path.exists(csv_path):
-        csv_path = os.path.join(BASE_DIR, "brd_report.csv")
     try:
         df = pd.read_csv(csv_path)
         df["brd_score"] = df["brd_score"].apply(
@@ -299,6 +305,10 @@ def get_brd_report(
         df["brd_reasoning"] = df["brd_reasoning"].apply(
             lambda x: "" if x is None or (isinstance(x, float) and math.isnan(x)) else str(x)
         )
+        for col in df.select_dtypes(include="object").columns:
+            df[col] = df[col].fillna("")
+        for col in df.select_dtypes(include="number").columns:
+            df[col] = df[col].fillna(0)
         return JSONResponse(content={
             "source":        "cached",
             "project_key":   project_key,
@@ -309,7 +319,7 @@ def get_brd_report(
             "tasks":         df.to_dict(orient="records"),
         })
     except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="brd_report.csv not found. Run main.py first.")
+        raise HTTPException(status_code=404, detail=f"brd_report_{project_key}.csv not found. Run: python3 main.py {project_key}")
 
 
 @app.post("/analyze/brd-all")

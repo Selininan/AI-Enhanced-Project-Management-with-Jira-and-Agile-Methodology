@@ -1,66 +1,95 @@
 key,summary,validation_result
-BAI-66,backend test,Epic link missing
-BAI-65,project managment assignee test,Epic link missing
-BAI-64,wrong-person-test,Epic link missing
-BAI-63,overload-test-3 business analysis overloading ,Epic link missing
-BAI-62,overload-test-3,Epic link missing
-BAI-61,overload-testing-2,Epic link missing
-BAI-60,Overload-test-1,Epic link missing
-BAI-59,Build REST API endpoint,Epic link missing ; Assignee missing
-BAI-58,backend mcp server,Epic link missing ; Assignee missing
-BAI-57,backend MCP server,Epic link missing ; Assignee missing
-BAI-56,test 35334,Epic link missing ; Assignee missing
-BAI-55,assignee-test-6,Epic link missing ; Assignee missing
-BAI-54,assignee-test-4,Epic link missing ; Assignee missing
-BAI-53,assignee-test-3,Epic link missing ; Assignee missing
-BAI-52,assignee-test-2,Epic link missing ; Assignee missing
-BAI-51,assignee-test1,Epic link missing ; Assignee missing
-BAI-50,n8n testing-5,Epic link missing
-BAI-49,N8N TESTING-4,Epic link missing
-BAI-48,Test 3 n8n,Epic link missing
-BAI-47,Test 2 - n8n ,Epic link missing
-BAI-46,Test n8n,Epic link missing
-BAI-45,Integrate Teams notification service,Valid
-BAI-44,Write unit tests for stock API,Epic link missing
-BAI-43,Set up database migration scripts,Valid
-BAI-42,Update dashboard layout,Valid
-BAI-41,Fix,Summary too short
-BAI-40,Fix authentication bug,Valid
-BAI-39,T-4.2.1 — Configure n8n Jira webhook listener,Valid
-BAI-38,T-4.3.1 — Implement all FastAPI endpoints,Valid
-BAI-37,T-4.1.1 — Create config.py and .env setup,Valid
-BAI-36,T-3.2.1 — Build n8n daily 09:00 scheduler workflow,Valid
-BAI-35,T-3.1.3 — Claude API English summary text generation,Valid
-BAI-34,T-3.1.2 — Build capacity report dashboard UI,Valid
-BAI-33,T-3.1.1 — Connect capacity agent to FastAPI endpoint,Valid
-BAI-32,T-2.3.2 — Build filter panel UI component,Valid
-BAI-31,T-2.3.1 — Build filter API parameters and query optimization,Valid
-BAI-30,T-2.2.2 — Build critical stock email notification service,Valid
-BAI-29,T-2.2.1 — Build stock update API and validation,Valid
-BAI-28,T-2.1.3 — Performance and stock color code test,Valid
-BAI-27,T-2.1.2 — Build product list and search UI component,Valid
-BAI-26,T-2.1.1 — Build product listing API endpoint,Valid
-BAI-25,T-1.3.3 — Permission control and security test,Valid
-BAI-24,T-1.3.2 — Build log listing and Excel export UI,Valid
-BAI-23,T-1.3.1 — Build audit log service and database table,Valid
-BAI-22,T-1.2.2 — Build user management screen UI,Valid
-BAI-21,T-1.2.1 — Implement RBAC backend,Valid
-BAI-20,T-1.1.3 — SSO login flow integration tests,Valid
-BAI-19,T-1.1.2 — Build login page UI,Valid
-BAI-18,T-1.1.1 — Implement OAuth 2.0 / Azure AD integration,Valid
-BAI-17,S-4.3 — FastAPI should serve all agents as HTTP endpoints,Valid
-BAI-16,S-4.2 — n8n should be able to listen to Jira events and trigger agents,Valid
-BAI-15,S-4.1 — Developer environment should be secure and reproducible,Valid
-BAI-14,S-3.3 — BRD alignment score generated automatically when task is created,Valid
-BAI-13,S-3.2 — PM should receive sprint summary on Teams every morning,Valid
-BAI-12,S-3.1 — PM should be able to get a capacity report before the sprint starts,Valid
-BAI-11,S-2.3 — User should be able to filter products by category and price,Valid
-BAI-10,S-2.2 — Product manager should be able to update stock quantity,Valid
-BAI-9,S-2.1 — Warehouse staff should be able to view the product list,Valid
-BAI-8,S-1.3 — PM should be able to view user activity history,Valid
-BAI-7,S-1.2 — System administrator should be able to assign user roles,Valid
-BAI-6,S-1.1 — Admin user should be able to log in via SSO,Valid
-BAI-5,EP-4 — Integration & API,Assignee missing
-BAI-4,EP-3 — Reporting & Analysis,Assignee missing
-BAI-3,EP-2 — Product Catalog / Inventory,Assignee missing
-BAI-2,EP-1 — User Management,Assignee missing
+ST-81,T-3.2.1 — Build n8n daily 09:00 scheduler workflow,Valid
+ST-84,T-3.1.3 — Claude API English summary text generation,Valid
+ST-83,T-3.1.2 — Build capacity report dashboard UI,Valid
+ST-82,T-3.1.1 — Connect capacity agent to FastAPI endpoint,Valid
+ST-76,T-2.3.2 — Build filter panel UI component,Valid
+ST-75,T-2.3.1 — Build filter API parameters and query optimization,Valid
+ST-78,T-2.2.2 — Build critical stock email notification service,Valid
+ST-77,T-2.2.1 — Build stock update API and validation,Valid
+ST-72,T-2.1.3 — Performance and stock color code test,Valid
+ST-71,T-2.1.2 — Build product list and search UI component,Valid
+ST-70,T-2.1.1 — Build product listing API endpoint,Valid
+ST-92,T-1.3.3 — Permission control and security test,Valid
+ST-91,T-1.3.2 — Build log listing and Excel export UI,Valid
+ST-90,T-1.3.1 — Build audit log service and database table,Valid
+ST-94,T-1.2.2 — Build user management screen UI,Valid
+ST-93,T-1.2.1 — Implement role-based access control (RBAC) backend,Valid
+ST-89,T-1.1.3 — SSO login flow integration tests,Valid
+ST-88,T-1.1.2 — Build login page UI,Valid
+ST-87,T-1.1.1 — Implement OAuth 2.0 / Azure AD integration,Valid
+ST-51,S-4.3 — FastAPI should be able to serve all agents as HTTP endpoints,Valid
+ST-49,S-4.2 — n8n should be able to listen to Jira events and trigger agents,Valid
+ST-50,S-4.1 — Developer environment should be secure and reproducible,Valid
+ST-53,S-3.3 — BRD alignment score should be automatically generated when a new task is created,Valid
+ST-54,S-3.2 — PM should receive sprint summary on Teams every morning,Valid
+ST-52,S-3.1 — PM should be able to get a capacity report before the sprint starts,Valid
+ST-46,S-2.3 — User should be able to filter products by category and price,Valid
+ST-47,S-2.2 — Product manager should be able to update stock quantity,Valid
+ST-48,S-2.1 — Warehouse staff should be able to view the product list,Valid
+ST-42,S-1.3 — PM should be able to view user activity history,Valid
+ST-41,S-1.2 — System administrator should be able to assign user roles,Valid
+ST-40,S-1.1 — Admin user should be able to log in via SSO,Valid
+ST-6,EP-4 — Integration & API,Valid
+ST-5,EP-3 — Reporting & Analysis,Valid
+ST-8,EP-2 — Product Catalog / Inventory,Valid
+ST-7,EP-1 — User Management,Valid
+ST-33,Admin should be able to assign user roles,Valid
+ST-34,Admin should be able to log in via SSO,Valid
+ST-11,User Management,Valid
+ST-29,Define Data Requirements and Structures,Assignee missing
+ST-30,Define User Interface Requirements,Assignee missing
+ST-18,Document exception flows,Assignee missing
+ST-32,Create the Use Case Model,Valid
+ST-65,Mark high-risk use cases,Description missing ; Assignee missing
+ST-64,Mark high-value use cases,Description missing ; Assignee missing
+ST-21,Prioritize use cases by business value and risk,Description missing ; Assignee missing
+ST-22,Identify system and time-based actors,Assignee missing
+ST-56,List included capabilities,Description missing ; Assignee missing
+ST-20,Define in-scope and out-of-scope system elements,Description missing ; Assignee missing
+ST-69,Validate scope and boundary with stakeholders,Assignee missing
+ST-68,Define solution boundary and system interfaces,Assignee missing
+ST-67,Document measurable project objectives,Description missing ; Assignee missing
+ST-66,Review the problem statement with stakeholders,Description missing ; Assignee missing
+ST-19,Identify business goals and expected outcomes,Valid
+ST-31,Define Project Scope and System Boundary,Valid
+ST-10,Use Case Driven Requirements and Delivery Framework,Assignee missing
+ST-28,Build a traceability matrix,Assignee missing
+ST-27,Link requirements to use cases,Description missing ; Assignee missing
+ST-55,Create a separate requirements list,Valid
+ST-9,Build a Traceable Requirements Structure,Assignee missing
+ST-26,Align user interface design with use cases,Assignee missing
+ST-80,Define user-facing system messages,Description missing ; Assignee missing
+ST-79,Document input validation rules,Description missing ; Assignee missing
+ST-44,"Define edits, validations, and messages",Assignee missing
+ST-43,Identify user interface touchpoints,Valid
+ST-4,Define Interfaces and User Interaction Points,Valid
+ST-25,Identify temporal actors and time triggers,Valid
+ST-74,Differentiate roles from job titles,Description missing ; Assignee missing
+ST-73,List user roles interacting with the system,Description missing ; Assignee missing
+ST-45,Identify human actors by role,Valid
+ST-2,Identify Actors and Their Roles,Assignee missing
+ST-24,Validate scope alignment with stakeholders,Valid
+ST-23,Define business objectives for the system,Assignee missing
+ST-86,Document in-scope and out-of-scope elements,Description missing ; Assignee missing
+ST-85,Review the business problem and project vision,Description missing ; Assignee missing
+ST-39,Identify the target system boundary,Assignee missing
+ST-1,Define System Scope and Project Boundaries,Assignee missing
+ST-13,Testing the backend,Description missing
+ST-63,Hook up login page to web service REST API.,Description missing ; Assignee missing
+ST-62,Create web service REST API for user resource.,Description missing ; Assignee missing
+ST-61,Create SQL scripts for stored procedures.,Description missing
+ST-60,Create SQL scripts to create tables,Description missing
+ST-59,Implement login page HTML/CSS/JS.,Description missing
+ST-58,Cut SVG icons and images.,Description missing
+ST-57,Design login page.,Description missing
+ST-12,Setup Jenkins CI pipeline.,Assignee missing
+ST-17,Research and decide on unit test and mocking framework.,Assignee missing
+ST-14,Design overall (high-level) system architecture.,Assignee missing
+ST-16,"Setup GCP (or AWS) account, containers, and services",Assignee missing
+ST-15,Setup GitHub project repo,Valid
+ST-38,Facebook login support,Valid
+ST-36,Google login support,Valid
+ST-37,Forgot Password workflow. ,Valid
+ST-35,User Login screen,Valid
+ST-3,User Authentication,Valid

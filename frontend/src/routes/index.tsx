@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { AlertTriangle, CircleDot, ListTodo, Lightbulb } from "lucide-react";
 import { analyzeSprint, SprintAnalysis } from "@/lib/api";
+import { useProject } from "@/context/ProjectContext";
 import {
   CircularProgress,
   MetricCard,
@@ -16,26 +17,29 @@ export const Route = createFileRoute("/")({
 });
 
 function Dashboard() {
+  const { selectedProject } = useProject();
   const [data, setData] = useState<SprintAnalysis | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const load = async () => {
-    setLoading(true);
-    setError("");
-    try {
-      setData(await analyzeSprint());
-    } catch {
-      setError("Backend'e bağlanılamadı. FastAPI server çalışıyor mu?");
-    }
-    setLoading(false);
-  };
 
   useEffect(() => {
+    setData(null);
+    let cancelled = false;
+    const load = async () => {
+      setLoading(true);
+      setError("");
+      try {
+        const d = await analyzeSprint(selectedProject);
+        if (!cancelled) setData(d);
+      } catch {
+        if (!cancelled) setError("Could not connect to backend. Is FastAPI running?");
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
     load();
-    const h = () => load();
-    window.addEventListener("bai:refresh", h);
-    return () => window.removeEventListener("bai:refresh", h);
-  }, []);
+    return () => { cancelled = true; };
+  }, [selectedProject]);
 
   if (!loading && error) return <div className="p-6 text-destructive">{error}</div>;
 
