@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SprintAnalysisRouteImport } from './routes/sprint-analysis'
+import { Route as CompareRouteImport } from './routes/compare'
 import { Route as ChatRouteImport } from './routes/chat'
 import { Route as CapacityRouteImport } from './routes/capacity'
 import { Route as BrdRouteImport } from './routes/brd'
@@ -18,6 +19,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const SprintAnalysisRoute = SprintAnalysisRouteImport.update({
   id: '/sprint-analysis',
   path: '/sprint-analysis',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompareRoute = CompareRouteImport.update({
+  id: '/compare',
+  path: '/compare',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ChatRoute = ChatRouteImport.update({
@@ -46,6 +52,7 @@ export interface FileRoutesByFullPath {
   '/brd': typeof BrdRoute
   '/capacity': typeof CapacityRoute
   '/chat': typeof ChatRoute
+  '/compare': typeof CompareRoute
   '/sprint-analysis': typeof SprintAnalysisRoute
 }
 export interface FileRoutesByTo {
@@ -53,6 +60,7 @@ export interface FileRoutesByTo {
   '/brd': typeof BrdRoute
   '/capacity': typeof CapacityRoute
   '/chat': typeof ChatRoute
+  '/compare': typeof CompareRoute
   '/sprint-analysis': typeof SprintAnalysisRoute
 }
 export interface FileRoutesById {
@@ -61,14 +69,28 @@ export interface FileRoutesById {
   '/brd': typeof BrdRoute
   '/capacity': typeof CapacityRoute
   '/chat': typeof ChatRoute
+  '/compare': typeof CompareRoute
   '/sprint-analysis': typeof SprintAnalysisRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/brd' | '/capacity' | '/chat' | '/sprint-analysis'
+  fullPaths:
+    | '/'
+    | '/brd'
+    | '/capacity'
+    | '/chat'
+    | '/compare'
+    | '/sprint-analysis'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/brd' | '/capacity' | '/chat' | '/sprint-analysis'
-  id: '__root__' | '/' | '/brd' | '/capacity' | '/chat' | '/sprint-analysis'
+  to: '/' | '/brd' | '/capacity' | '/chat' | '/compare' | '/sprint-analysis'
+  id:
+    | '__root__'
+    | '/'
+    | '/brd'
+    | '/capacity'
+    | '/chat'
+    | '/compare'
+    | '/sprint-analysis'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -76,6 +98,7 @@ export interface RootRouteChildren {
   BrdRoute: typeof BrdRoute
   CapacityRoute: typeof CapacityRoute
   ChatRoute: typeof ChatRoute
+  CompareRoute: typeof CompareRoute
   SprintAnalysisRoute: typeof SprintAnalysisRoute
 }
 
@@ -86,6 +109,13 @@ declare module '@tanstack/react-router' {
       path: '/sprint-analysis'
       fullPath: '/sprint-analysis'
       preLoaderRoute: typeof SprintAnalysisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compare': {
+      id: '/compare'
+      path: '/compare'
+      fullPath: '/compare'
+      preLoaderRoute: typeof CompareRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/chat': {
@@ -124,6 +154,7 @@ const rootRouteChildren: RootRouteChildren = {
   BrdRoute: BrdRoute,
   CapacityRoute: CapacityRoute,
   ChatRoute: ChatRoute,
+  CompareRoute: CompareRoute,
   SprintAnalysisRoute: SprintAnalysisRoute,
 }
 export const routeTree = rootRouteImport

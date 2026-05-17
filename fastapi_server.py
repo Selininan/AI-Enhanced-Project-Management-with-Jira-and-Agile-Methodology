@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import math
@@ -20,7 +20,7 @@ from context.context_builder import build_context
 
 load_dotenv()
 
-app = FastAPI(title="BAI AI Agent API", version="1.0.0")
+app = FastAPI(title="BAI AI Agent API", version="2.0.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -29,24 +29,30 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-BASE_DIR       = os.path.dirname(os.path.abspath(__file__))
-BRD_PATH       = os.path.join(BASE_DIR, "brd_document.md")
-JIRA_EMAIL     = os.getenv("JIRA_EMAIL")
-JIRA_API_TOKEN = os.getenv("JIRA_API_TOKEN")
-JIRA_DOMAIN    = os.getenv("JIRA_DOMAIN")
-JIRA_PROJECT   = os.getenv("JIRA_PROJECT_KEY", "BAI")
-JIRA_URL       = f"https://{JIRA_DOMAIN}/rest/api/3/search/jql"
-HEADERS        = {"Accept": "application/json", "Content-Type": "application/json"}
+BASE_DIR        = os.path.dirname(os.path.abspath(__file__))
+BRD_PATH        = os.path.join(BASE_DIR, "brd_document.md")
+JIRA_EMAIL      = os.getenv("JIRA_EMAIL")
+JIRA_API_TOKEN  = os.getenv("JIRA_API_TOKEN")
+JIRA_DOMAIN     = os.getenv("JIRA_DOMAIN")
+DEFAULT_PROJECT = os.getenv("JIRA_PROJECT_KEY", "BAI")
+JIRA_URL        = f"https://{JIRA_DOMAIN}/rest/api/3/search/jql"
+HEADERS         = {"Accept": "application/json", "Content-Type": "application/json"}
 
+
+# ── Request / Response Models ──────────────────────────────────────────────────
 
 class SupportRequest(BaseModel):
-    question: str
+    question:    str
+    project_key: str = DEFAULT_PROJECT   # hangi projeyi sorsun?
 
 class BRDRequest(BaseModel):
     issue_key:   str
     summary:     str
     description: str = ""
+    project_key: str = DEFAULT_PROJECT
 
+
+# ── Helpers ────────────────────────────────────────────────────────────────────
 
 def extract_text_from_adf(adf_data):
     if isinstance(adf_data, dict):
@@ -59,9 +65,10 @@ def extract_text_from_adf(adf_data):
     return ""
 
 
-def fetch_jira_data() -> pd.DataFrame:
+def fetch_jira_data(project_key: str) -> pd.DataFrame:
+    """Verilen project_key için Jira'dan issue'ları çeker."""
     payload = {
-        "jql": f"project = '{JIRA_PROJECT}' ORDER BY created DESC",
+        "jql": f"project = '{project_key}' ORDER BY created DESC",
         "maxResults": 100,
         "fields": [
             "summary", "description", "status", "issuetype",
@@ -75,11 +82,14 @@ def fetch_jira_data() -> pd.DataFrame:
         auth=HTTPBasicAuth(JIRA_EMAIL, JIRA_API_TOKEN), json=payload
     )
     if response.status_code != 200:
-        raise HTTPException(status_code=502, detail=f"Jira API error: {response.status_code}")
+        raise HTTPException(
+            status_code=502,
+            detail=f"Jira API error for project '{project_key}': HTTP {response.status_code}"
+        )
 
     issues_list = []
     for issue in response.json().get("issues", []):
-        fields = issue.get("fields", {})
+        fields        = issue.get("fields", {})
         desc_data     = fields.get("description")
         description   = extract_text_from_adf(desc_data).strip() if desc_data else ""
         assignee_data = fields.get("assignee")
@@ -139,19 +149,45 @@ def run_all_agents(df):
     return df
 
 
-# ── Endpoints ─────────────────────────────────────────────────────────────────
+# ── Endpoints ──────────────────────────────────────────────────────────────────
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "project": JIRA_PROJECT}
+    return {"status": "ok", "default_project": DEFAULT_PROJECT}
+
+
+@app.get("/projects")
+def list_projects():
+    """
+    Jira'daki erişilebilir projeleri listeler.
+    Frontend dropdown için kullanılabilir.
+    """
+    url  = f"https://{JIRA_DOMAIN}/rest/api/3/project/search?maxResults=50&action=browse"
+    resp = requests.get(url, headers=HEADERS, auth=HTTPBasicAuth(JIRA_EMAIL, JIRA_API_TOKEN))
+    if resp.status_code != 200:
+        raise HTTPException(status_code=502, detail="Jira project list failed")
+    projects = [
+        {"key": p["key"], "name": p["name"]}
+        for p in resp.json().get("values", [])
+    ]
+    return {"projects": projects}
 
 
 @app.post("/analyze/sprint")
-def analyze_sprint():
-    df = fetch_jira_data()
+def analyze_sprint(
+    project_key: str = Query(
+        default=DEFAULT_PROJECT,
+        description="Jira project key, e.g. BAI, DT, DEV"
+    )
+):
+    """
+    Sprint risk raporu.
+    Kullanim: POST /analyze/sprint?project_key=DT
+    """
+    df = fetch_jira_data(project_key)
     if df.empty:
-        raise HTTPException(status_code=404, detail="No issues found.")
-    df = run_all_agents(df)
+        raise HTTPException(status_code=404, detail=f"No issues found in project '{project_key}'")
+    df            = run_all_agents(df)
     context       = build_context(df)
     average_risk  = float(df["risk_score"].mean())
     team_capacity, total_effort, _ = capacity_analysis(df)
@@ -168,9 +204,9 @@ def analyze_sprint():
             "delay", "sprint_name", "recommendation", "validation_result"]
     if "brd_score" in df.columns:
         cols += ["brd_score", "brd_reasoning"]
-    tasks_summary = df[cols].to_dict(orient="records")
 
     return {
+        "project_key":     project_key,
         "sprint_status":   sprint_status,
         "average_risk":    round(average_risk, 2),
         "total_tasks":     context["total_tasks"],
@@ -179,58 +215,84 @@ def analyze_sprint():
         "high_risk_tasks": context["high_risk_tasks"],
         "load_percentage": load_pct,
         "recommendations": recommendations,
-        "tasks":           tasks_summary,
+        "tasks":           df[cols].to_dict(orient="records"),
     }
 
 
 @app.post("/analyze/capacity")
-def analyze_capacity():
-    df = fetch_jira_data()
+def analyze_capacity(
+    project_key: str = Query(
+        default=DEFAULT_PROJECT,
+        description="Jira project key"
+    )
+):
+    """
+    Kapasite raporu.
+    Kullanim: POST /analyze/capacity?project_key=DEV
+    """
+    df = fetch_jira_data(project_key)
     if df.empty:
-        raise HTTPException(status_code=404, detail="No issues found.")
+        raise HTTPException(status_code=404, detail=f"No issues found in project '{project_key}'")
     df = run_all_agents(df)
     team_capacity, total_effort, bottleneck_raw = capacity_analysis(df)
     utilization = round(total_effort / team_capacity * 100, 1) if team_capacity else 0
 
     bottleneck_report = []
     for msg in bottleneck_raw:
-        if "🚨" in msg:
-            level = "critical"
-        elif "⚠️" in msg:
-            level = "warning"
-        else:
-            level = "ok"
+        level = "critical" if "🚨" in msg else "warning" if "⚠️" in msg else "ok"
         bottleneck_report.append({"level": level, "message": msg})
 
     workload = []
     if "assignee" in df.columns and "story_points" in df.columns:
         for assignee, group in df[df["assignee"] != "Unassigned"].groupby("assignee"):
-            workload.append({"assignee": assignee, "story_points": int(group["story_points"].sum())})
+            workload.append({
+                "assignee":     assignee,
+                "story_points": int(group["story_points"].sum()),
+            })
 
     return {
-        "team_capacity": float(team_capacity),
-        "total_effort":  float(total_effort),
-        "utilization":   utilization,
-        "is_overloaded": bool(total_effort > team_capacity),
+        "project_key":       project_key,
+        "team_capacity":     float(team_capacity),
+        "total_effort":      float(total_effort),
+        "utilization":       utilization,
+        "is_overloaded":     bool(total_effort > team_capacity),
         "bottleneck_report": bottleneck_report,
-        "workload":      workload,
+        "workload":          workload,
     }
 
 
 @app.post("/support/ask")
 def support_ask(request: SupportRequest):
+    """
+    AI Jira destek sorusu.
+    Body'de project_key ile proje bazlı bağlam verilir.
+    """
     if not request.question.strip():
         raise HTTPException(status_code=400, detail="Question cannot be empty.")
-    df    = fetch_jira_data()
+    df    = fetch_jira_data(request.project_key)
     df    = run_all_agents(df) if not df.empty else df
     agent = JiraSupportAgent(df if not df.empty else None)
-    return {"question": request.question, "answer": agent.ask(request.question)}
+    return {
+        "project_key": request.project_key,
+        "question":    request.question,
+        "answer":      agent.ask(request.question),
+    }
 
 
 @app.get("/analyze/brd-report")
-def get_brd_report():
+def get_brd_report(
+    project_key: str = Query(default=DEFAULT_PROJECT)
+):
+    """
+    Onceden uretilmis brd_report.csv okur.
+    Her proje icin ayri CSV: brd_report_DT.csv, brd_report_BAI.csv
+    """
+    csv_name = f"brd_report_{project_key}.csv" if project_key != DEFAULT_PROJECT else "brd_report.csv"
+    csv_path = os.path.join(BASE_DIR, csv_name)
+    if not os.path.exists(csv_path):
+        csv_path = os.path.join(BASE_DIR, "brd_report.csv")
     try:
-        df = pd.read_csv(os.path.join(BASE_DIR, "brd_report.csv"))
+        df = pd.read_csv(csv_path)
         df["brd_score"] = df["brd_score"].apply(
             lambda x: 0 if x is None or (isinstance(x, float) and math.isnan(x)) else int(x)
         )
@@ -238,45 +300,105 @@ def get_brd_report():
             lambda x: "" if x is None or (isinstance(x, float) and math.isnan(x)) else str(x)
         )
         return JSONResponse(content={
-            "source": "cached",
-            "total": len(df),
+            "source":        "cached",
+            "project_key":   project_key,
+            "total":         len(df),
             "average_score": round(float(df["brd_score"].mean()), 1),
             "low_alignment": int((df["brd_score"] < 5).sum()),
             "high_alignment": int((df["brd_score"] >= 7).sum()),
-            "tasks": df.to_dict(orient="records"),
+            "tasks":         df.to_dict(orient="records"),
         })
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="brd_report.csv not found. Run main.py first.")
 
 
 @app.post("/analyze/brd-all")
-def analyze_brd_all():
-    df = fetch_jira_data()
+def analyze_brd_all(
+    project_key: str = Query(default=DEFAULT_PROJECT)
+):
+    """Tum proje issue'lari icin BRD skoru hesaplar, proje bazli CSV kaydeder."""
+    df = fetch_jira_data(project_key)
     if df.empty:
-        raise HTTPException(status_code=404, detail="No issues found.")
+        raise HTTPException(status_code=404, detail=f"No issues found in project '{project_key}'")
     df = run_brd_alignment(df, brd_path=BRD_PATH)
-    cols = ["key", "summary", "status", "assignee", "sprint_name", "brd_score", "brd_reasoning"]
+
+    csv_name = f"brd_report_{project_key}.csv"
+    df[["key", "summary", "brd_score", "brd_reasoning"]].to_csv(
+        os.path.join(BASE_DIR, csv_name), index=False
+    )
+
+    cols   = ["key", "summary", "status", "assignee", "sprint_name", "brd_score", "brd_reasoning"]
     result = df[cols].copy()
-    result["brd_score"] = result["brd_score"].apply(lambda x: 0 if x is None or (isinstance(x, float) and math.isnan(x)) else int(x))
-    result["brd_reasoning"] = result["brd_reasoning"].apply(lambda x: "" if x is None or (isinstance(x, float) and math.isnan(x)) else str(x))
-    records = result.to_dict(orient="records")
-    return JSONResponse(content={"tasks": records})
+    result["brd_score"] = result["brd_score"].apply(
+        lambda x: 0 if x is None or (isinstance(x, float) and math.isnan(x)) else int(x)
+    )
+    result["brd_reasoning"] = result["brd_reasoning"].apply(
+        lambda x: "" if x is None or (isinstance(x, float) and math.isnan(x)) else str(x)
+    )
+    return JSONResponse(content={"project_key": project_key, "tasks": result.to_dict(orient="records")})
 
 
 @app.post("/analyze/brd")
 def analyze_brd(request: BRDRequest):
+    """Tek bir issue icin BRD skoru hesaplar."""
     if not request.summary.strip():
         raise HTTPException(status_code=400, detail="Summary cannot be empty.")
     brd_text  = load_brd_document(BRD_PATH)
     result    = call_openai_for_brd_score(request.summary, request.description, brd_text)
     score     = result["score"]
     reasoning = result["reasoning"]
-    if 0 < score:
+    if score > 0:
         add_brd_comment_to_jira(request.issue_key, score, reasoning)
     return {
+        "project_key":          request.project_key,
         "issue_key":            request.issue_key,
         "brd_score":            score,
         "reasoning":            reasoning,
         "alignment_level":      "HIGH" if score >= 7 else "MEDIUM" if score >= 5 else "LOW",
         "jira_comment_written": score > 0,
     }
+
+
+# ── Multi-project karsilastirma endpoint'i (YENİ) ─────────────────────────────
+
+@app.get("/compare/sprint")
+def compare_projects(
+    projects: str = Query(
+        default="BAI,DT",
+        description="Virgülle ayrilmis proje key'leri, örn: BAI,DT,DEV"
+    )
+):
+    """
+    Birden fazla projeyi ayni anda analiz edip karsilastirmali ozet doner.
+    Kullanim: GET /compare/sprint?projects=BAI,DT,DEV
+    """
+    keys = [k.strip().upper() for k in projects.split(",") if k.strip()]
+    if not keys:
+        raise HTTPException(status_code=400, detail="At least one project key required.")
+
+    results = []
+    for key in keys:
+        try:
+            df = fetch_jira_data(key)
+            if df.empty:
+                results.append({"project_key": key, "error": "No issues found"})
+                continue
+            df       = run_all_agents(df)
+            avg_risk = float(df["risk_score"].mean())
+            team_cap, effort, _ = capacity_analysis(df)
+            results.append({
+                "project_key":     key,
+                "total_tasks":     len(df),
+                "completed":       int((df["status"].isin(["Tamam", "Done", "Tamamlandi"])).sum()),
+                "delayed":         int(df["delay"].sum()),
+                "high_risk":       int((df["risk_score"] >= 3).sum()),
+                "average_risk":    round(avg_risk, 2),
+                "sprint_status":   "LOW RISK" if avg_risk < 1 else "MEDIUM RISK" if avg_risk < 2 else "HIGH RISK",
+                "team_capacity":   float(team_cap),
+                "total_effort":    float(effort),
+                "utilization_pct": round(effort / team_cap * 100, 1) if team_cap else 0,
+            })
+        except Exception as e:
+            results.append({"project_key": key, "error": str(e)})
+
+    return {"comparison": results}
