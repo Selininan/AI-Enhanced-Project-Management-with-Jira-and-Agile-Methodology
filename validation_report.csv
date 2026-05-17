@@ -1,4 +1,25 @@
 key,summary,validation_result
+BAI-66,backend test,Epic link missing
+BAI-65,project managment assignee test,Epic link missing
+BAI-64,wrong-person-test,Epic link missing
+BAI-63,overload-test-3 business analysis overloading ,Epic link missing
+BAI-62,overload-test-3,Epic link missing
+BAI-61,overload-testing-2,Epic link missing
+BAI-60,Overload-test-1,Epic link missing
+BAI-59,Build REST API endpoint,Epic link missing ; Assignee missing
+BAI-58,backend mcp server,Epic link missing ; Assignee missing
+BAI-57,backend MCP server,Epic link missing ; Assignee missing
+BAI-56,test 35334,Epic link missing ; Assignee missing
+BAI-55,assignee-test-6,Epic link missing ; Assignee missing
+BAI-54,assignee-test-4,Epic link missing ; Assignee missing
+BAI-53,assignee-test-3,Epic link missing ; Assignee missing
+BAI-52,assignee-test-2,Epic link missing ; Assignee missing
+BAI-51,assignee-test1,Epic link missing ; Assignee missing
+BAI-50,n8n testing-5,Epic link missing
+BAI-49,N8N TESTING-4,Epic link missing
+BAI-48,Test 3 n8n,Epic link missing
+BAI-47,Test 2 - n8n ,Epic link missing
+BAI-46,Test n8n,Epic link missing
 BAI-45,Integrate Teams notification service,Valid
 BAI-44,Write unit tests for stock API,Epic link missing
 BAI-43,Set up database migration scripts,Valid

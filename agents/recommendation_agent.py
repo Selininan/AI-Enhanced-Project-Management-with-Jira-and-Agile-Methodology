@@ -17,9 +17,9 @@ def ai_recommendation(df):
         team_expertise = {k.lower(): v for k, v in learned_expertise.items()}
         
         # Sadece geliştirme aşamasında AI'ın neleri öğrendiğini görmek için terminale basalım
-        print("\n🧠 AI Öğrenme Raporu (Kişi -> Uzmanlık):")
-        for kisi, uzmanlik in team_expertise.items():
-            print(f"- {kisi.title()}: {uzmanlik}")
+        print("\n🧠 AI Learning Report (Person -> Expertise):")
+        for person, expertise in team_expertise.items():
+            print(f"- {person.title()}: {expertise}")
 
     # 2. ÖĞRENİLEN VERİLERLE TAVSİYE VERME AŞAMASI
     def recommendation(row):

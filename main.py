@@ -65,7 +65,7 @@ def predict_delay(estimated_hours):
 def fetch_and_analyze():
     payload = {
         "jql": f"project = '{project_key}' ORDER BY created DESC",
-        "maxResults": 50,
+        "maxResults": 100,
         "fields": [
             "summary", "description", "status", "issuetype",
             "priority", "assignee", "created", "updated",

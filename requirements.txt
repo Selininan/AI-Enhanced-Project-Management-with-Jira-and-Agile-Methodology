@@ -5,3 +5,5 @@ fpdf
 python-dotenv
 fastapi
 uvicorn
+openai
+mcp[cli]
